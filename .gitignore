@@ -1,0 +1,14 @@
+# File di ambiente con chiavi segrete
+# NON condividere o caricare online questo file
+.env
+.env.local
+*.env
+
+# Dipendenze Node e librerie esterne
+node_modules/
+.npm/
+
+# File di sistema e log
+*.log
+.DS_Store
+Thumbs.db

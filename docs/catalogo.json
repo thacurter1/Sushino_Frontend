@@ -1,0 +1,863 @@
+[
+  {
+    "id": "box-pranzo",
+    "name": "Tropical Box Pranzo",
+    "badge": "Solo a pranzo",
+    "description": "Disponibili solo giovedì, venerdì e sabato a pranzo (12:00 - 14:00).",
+    "isLunchOnly": true,
+    "products": [
+      {
+        "id": "prod-tb-lunch",
+        "name": "Tropical lunch box",
+        "priceCents": 1500,
+        "description": "Edamame, Nigiri salmone (3 pz) + 1 Uramaki (8 pz) a scelta inclusa.",
+        "allergens": [
+          1,
+          4,
+          6
+        ],
+        "isLunchOnly": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80",
+        "isSlotBox": true,
+        "slots": 1,
+        "fixedContent": "Edamame, Nigiri salmone (3 pz)",
+        "allowedChoices": [
+          "Uramaki Philadelphia 8 pz",
+          "Uramaki Tempura 8 pz",
+          "Olio's Uramaki 8 pz",
+          "Uramaki Tonno Piccante 8 pz"
+        ]
+      },
+      {
+        "id": "prod-tb-veggie",
+        "name": "Tropical #Veggie lunch",
+        "priceCents": 1400,
+        "description": "Edamame, Gyoza vegetariani 3 pz, Veggie Crock 8 pz.",
+        "allergens": [
+          1,
+          6,
+          9,
+          11,
+          14
+        ],
+        "isLunchOnly": true,
+        "img": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "prod-tb-combo",
+        "name": "Tropical #Combo lunch",
+        "priceCents": 2000,
+        "description": "Combo speciale di 16 pezzi selezionati con cura dallo chef sushiman.",
+        "allergens": [
+          1,
+          4,
+          6
+        ],
+        "isLunchOnly": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "tropical-box",
+    "name": "Tropical Sushi Box",
+    "badge": "Le Più Amate",
+    "description": "Tre, cinque o otto piatti a scelta tra uramaki e specialità della casa. Il totale non cambia mai.",
+    "isLunchOnly": false,
+    "products": [
+      {
+        "id": "box-3",
+        "name": "Small Tropical Sushi Box 3 piatti",
+        "priceCents": 2100,
+        "slots": 3,
+        "description": "1 persona / piccolo aperitivo. Scegli 3 piatti dal menu compresi nel prezzo.",
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80",
+        "isSlotBox": true
+      },
+      {
+        "id": "box-5",
+        "name": "Tropical Sushi Box 5 piatti",
+        "priceCents": 3000,
+        "slots": 5,
+        "description": "2 persone. Scegli 5 piatti dal menu compresi nel prezzo.",
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80",
+        "isSlotBox": true
+      },
+      {
+        "id": "box-8",
+        "name": "Tropical Sushi Box 8 piatti",
+        "priceCents": 5100,
+        "slots": 8,
+        "description": "3 o più persone. Scegli 8 piatti dal menu compresi nel prezzo.",
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80",
+        "isSlotBox": true
+      },
+      {
+        "id": "box-vegan",
+        "name": "Box Vegana",
+        "priceCents": 2500,
+        "description": "Contenuto fisso: Uramaki Vegan, Sashimi tofu affumicato, Nigiri tofu affumicato e wakame, Futomaki Veg (1,6).",
+        "allergens": [
+          1,
+          6
+        ],
+        "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop&q=80",
+        "isSlotBox": false
+      }
+    ]
+  },
+  {
+    "id": "gift-card",
+    "name": "Tropical Gift Card",
+    "badge": "Buono Regalo",
+    "description": "Regala l'esperienza tropicale di Sushino. Scegli il taglio desiderato.",
+    "products": [
+      {
+        "id": "gift-3",
+        "name": "Gift Card 3 piatti",
+        "priceCents": 2100,
+        "description": "Valida per 1 persona / piccolo aperitivo (3 piatti a scelta).",
+        "img": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "gift-5",
+        "name": "Gift Card 5 piatti",
+        "priceCents": 3000,
+        "description": "Valida per 2 persone (5 piatti a scelta).",
+        "img": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "gift-10",
+        "name": "Gift Card 10 piatti",
+        "priceCents": 5900,
+        "description": "La formula festa per tutta la famiglia o amici (10 piatti a scelta).",
+        "img": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "entree",
+    "name": "Entrée",
+    "badge": "Antipasti",
+    "description": "Sfiziosità e antipasti caldi o crudi per cominciare l'esperienza tropicale.",
+    "products": [
+      {
+        "id": "entree-1",
+        "name": "Nuggets di salmone fritto",
+        "priceCents": 600,
+        "description": "Salmone fritto con salsa speciale ed erba cipollina.",
+        "allergens": [
+          1,
+          4,
+          7
+        ],
+        "img": "https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-2",
+        "name": "Gambero Kataifi",
+        "priceCents": 690,
+        "description": "Gamberi in pasta kataifi croccante con salsa agrodolce.",
+        "allergens": [
+          1,
+          2,
+          3,
+          12
+        ],
+        "img": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-3",
+        "name": "Crocchette di pesce misto",
+        "priceCents": 550,
+        "description": "Mayo giapponese, salsa agrodolce e teriyaki.",
+        "allergens": [
+          1,
+          3,
+          4,
+          6,
+          12
+        ],
+        "img": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-4",
+        "name": "Edamame",
+        "priceCents": 500,
+        "description": "Baccelli di soia cotti a vapore con sale Maldon.",
+        "allergens": [
+          6
+        ],
+        "img": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-5",
+        "name": "Gyoza di Gambero (3 pz)",
+        "priceCents": 700,
+        "description": "Ravioli giapponesi ripieni di gambero cotti alla piastra.",
+        "allergens": [
+          1,
+          2,
+          6,
+          11,
+          14
+        ],
+        "img": "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-6",
+        "name": "Gyoza di pollo e verdure (3 pz)",
+        "priceCents": 600,
+        "description": "Ravioli tradizionali ripieni di pollo e verdure fresche.",
+        "allergens": [
+          1,
+          6,
+          9,
+          11
+        ],
+        "img": "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-7",
+        "name": "Gyoza Vegetariani (3 pz)",
+        "priceCents": 500,
+        "description": "Ravioli leggeri ripieni 100% di verdure.",
+        "allergens": [
+          1,
+          6,
+          9,
+          11,
+          14
+        ],
+        "img": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-8",
+        "name": "Sashimi di Salmone (5 pz)",
+        "priceCents": 800,
+        "description": "Fette di salmone crudo fresco abbattuto.",
+        "allergens": [
+          4
+        ],
+        "img": "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "entree-9",
+        "name": "Sashimi di Tonno (5 pz)",
+        "priceCents": 900,
+        "description": "Fette di tonno rosso selezionato di prima scelta.",
+        "allergens": [
+          4
+        ],
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "nigiri",
+    "name": "Nigiri (3 pezzi)",
+    "badge": "Classici & Tropical",
+    "description": "Polpettine di riso pressato guarnite con fettine di pesce crudo o scottato.",
+    "products": [
+      {
+        "id": "nig-1",
+        "name": "Nigiri Branzino",
+        "priceCents": 650,
+        "allergens": [
+          4
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "nig-2",
+        "name": "Nigiri Gambero",
+        "priceCents": 550,
+        "allergens": [
+          1,
+          2
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "nig-3",
+        "name": "Nigiri Tonno Guacamole",
+        "priceCents": 600,
+        "allergens": [
+          4
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "nig-4",
+        "name": "Nigiri Salmon Sealed",
+        "priceCents": 550,
+        "description": "Salmone scottato con tartufo e limone.",
+        "allergens": [
+          4
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "nig-5",
+        "name": "Nigiri Salmone",
+        "priceCents": 400,
+        "allergens": [
+          4
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "nig-6",
+        "name": "Nigiri Tonno",
+        "priceCents": 450,
+        "allergens": [
+          4
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "uramaki-salmone",
+    "name": "Uramaki Salmone (8 pz)",
+    "badge": "I Roll al Salmone",
+    "description": "Riso 100% naturale all'esterno e salmone fresco.",
+    "products": [
+      {
+        "id": "ura-sal-1",
+        "name": "Uramaki Salmone spicy",
+        "priceCents": 1350,
+        "allergens": [
+          1,
+          2,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-2",
+        "name": "Uramaki Waka",
+        "priceCents": 1150,
+        "allergens": [
+          1,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-3",
+        "name": "Apple-Maki",
+        "priceCents": 1100,
+        "allergens": [
+          1,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-4",
+        "name": "Tempura di Salmone",
+        "priceCents": 1150,
+        "allergens": [
+          1,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-5",
+        "name": "Uramaki California",
+        "priceCents": 1050,
+        "allergens": [
+          1,
+          2,
+          3,
+          4,
+          6,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-6",
+        "name": "Uramaki Philadelphia",
+        "priceCents": 1050,
+        "allergens": [
+          1,
+          4,
+          7,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-7",
+        "name": "Uramaki Tempura Spezie",
+        "priceCents": 1200,
+        "allergens": [
+          1,
+          4,
+          7,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-sal-8",
+        "name": "Uramaki White",
+        "priceCents": 1200,
+        "allergens": [
+          1,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "uramaki-tonno",
+    "name": "Uramaki Tonno (8 pz)",
+    "badge": "Specialità Tonno",
+    "description": "Roll a base di tonno fresco preparati al momento.",
+    "products": [
+      {
+        "id": "ura-ton-1",
+        "name": "Uramaki Tonno Pistacchio",
+        "priceCents": 1300,
+        "allergens": [
+          1,
+          3,
+          4,
+          7,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-ton-2",
+        "name": "Uramaki Edo",
+        "priceCents": 1200,
+        "allergens": null,
+        "allergensToBeConfirmed": true,
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-ton-3",
+        "name": "Uramaki Maguro",
+        "priceCents": 1200,
+        "allergens": [
+          1,
+          3,
+          4,
+          7,
+          10,
+          11,
+          14
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-ton-4",
+        "name": "Uramaki Tonno",
+        "priceCents": 1150,
+        "allergens": [
+          1,
+          3,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-ton-5",
+        "name": "Uramaki Tonno Piccante",
+        "priceCents": 1100,
+        "allergens": [
+          1,
+          3,
+          4,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "uramaki-gambero",
+    "name": "Uramaki Gambero (8 pz)",
+    "badge": "Gambero & Tempura",
+    "description": "Roll con gambero fresco, cotto o in croccante tempura.",
+    "products": [
+      {
+        "id": "ura-gam-1",
+        "name": "Uramaki Ebi Pistacchio",
+        "priceCents": 1300,
+        "allergens": null,
+        "allergensToBeConfirmed": true,
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-gam-2",
+        "name": "Uramaki Manganelli",
+        "priceCents": 1200,
+        "allergens": [
+          1,
+          2,
+          6
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-gam-3",
+        "name": "Uramaki Ebi Tempura",
+        "priceCents": 1100,
+        "allergens": [
+          1,
+          2,
+          3,
+          7,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-gam-4",
+        "name": "Uramaki Horonigai",
+        "priceCents": 1200,
+        "allergens": [
+          1,
+          2,
+          3,
+          7,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-gam-5",
+        "name": "Uramaki Tempura",
+        "priceCents": 1150,
+        "allergens": [
+          1,
+          2,
+          3,
+          7,
+          8,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "uramaki-branzino",
+    "name": "Uramaki Branzino (8 pz)",
+    "badge": "Branzino Fusion",
+    "description": "Roll freschi e leggeri con filetto di branzino.",
+    "products": [
+      {
+        "id": "ura-bra-1",
+        "name": "Olio's Uramaki",
+        "priceCents": 1150,
+        "allergens": [
+          1,
+          4,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-bra-2",
+        "name": "Uramaki Nikei",
+        "priceCents": 1100,
+        "allergens": [
+          1,
+          4
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "ura-bra-3",
+        "name": "Uramaki Kreb",
+        "priceCents": 1200,
+        "allergens": [
+          1,
+          4,
+          11
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "vegg-maki",
+    "name": "Vegg-Maki",
+    "badge": "Vegetariano & Vegano",
+    "description": "Specialità e roll a base esclusivamente vegetale.",
+    "products": [
+      {
+        "id": "vegg-1",
+        "name": "Gunkan Green (4 pz)",
+        "priceCents": 600,
+        "allergens": [
+          1
+        ],
+        "description": "Pomodori secchi, cipolla croccante, cetriolo e avocado.",
+        "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "vegg-2",
+        "name": "Kiuri-Maki (8 pz)",
+        "priceCents": 1050,
+        "allergens": null,
+        "allergensToBeConfirmed": true,
+        "description": "Funghi, rucola, tempura di verdure, salsa teriyaki.",
+        "img": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "vegg-3",
+        "name": "Veggie Crock (8 pz)",
+        "priceCents": 950,
+        "allergens": [
+          1,
+          6,
+          11
+        ],
+        "description": "Esterno: Alga Wakame, alga alla soia. Interno: Rucola, cetriolo e cipolla croccante.",
+        "img": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "gunkan-joe",
+    "name": "Gunkan Joe (2 pz)",
+    "badge": "Bocconcini Gourmet",
+    "description": "Bocconcini di riso avvolti da una fetta di pesce o alga con ricca guarnizione superiore.",
+    "products": [
+      {
+        "id": "gunkan-1",
+        "name": "Gunkan Nachos (2 pz)",
+        "priceCents": 800,
+        "allergens": [
+          1,
+          4,
+          12
+        ],
+        "description": "Salmone, philadelphia, guacamole e nachos croccanti.",
+        "img": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "gunkan-2",
+        "name": "Gunkan tempura (2 pz)",
+        "priceCents": 1050,
+        "allergens": null,
+        "allergensToBeConfirmed": true,
+        "description": "Gunkan speciale di gamberi impanati, salmone e philadelphia.",
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "gunkan-3",
+        "name": "Gunkan Tonno (2 pz)",
+        "priceCents": 900,
+        "allergens": [
+          1,
+          4,
+          12
+        ],
+        "description": "Tonno, sesamo, erba cipollina e salsa kimuchi.",
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "gunkan-4",
+        "name": "Gunkan di branzino (2 pz)",
+        "priceCents": 800,
+        "allergens": [
+          1,
+          4,
+          12
+        ],
+        "description": "Branzino, erba cipollina, scorza di limone e uova di masago.",
+        "img": "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "gunkan-5",
+        "name": "Gunkan di Salmone (2 pz)",
+        "priceCents": 700,
+        "allergens": [
+          1,
+          4,
+          12
+        ],
+        "description": "Salmone, maionese giapponese, erba cipollina, cipolle caramellate e sesamo.",
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "hosomaki",
+    "name": "Hosomaki (8 pz)",
+    "badge": "I Classici con Alga Esterna",
+    "description": "Piccoli roll tradizionali avvolti esternamente dall'alga nori.",
+    "products": [
+      {
+        "id": "hoso-1",
+        "name": "Hosomaki Salmone (8 pz)",
+        "priceCents": 700,
+        "allergens": [
+          1,
+          4,
+          12
+        ],
+        "description": "Alga nori esterna, riso naturale e cuore di salmone fresco.",
+        "img": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "hoso-2",
+        "name": "Hosomaki Tonno (8 pz)",
+        "priceCents": 800,
+        "allergens": [
+          1,
+          4,
+          12
+        ],
+        "description": "Alga nori esterna, riso naturale e cuore di tonno fresco.",
+        "img": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "hot-fried",
+    "name": "Hot Fried Roll (8 pz)",
+    "badge": "Roll Caldi Fritti",
+    "description": "I mitici roll caldi croccanti con guarnizioni golose.",
+    "products": [
+      {
+        "id": "hot-1",
+        "name": "Hot Salmon Roll",
+        "priceCents": 1250,
+        "description": "Roll fritto con salmone fresco, tartare e salsa teriyaki.",
+        "allergens": [
+          1,
+          4,
+          7
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "hot-2",
+        "name": "Pastelaria Roll",
+        "priceCents": 1350,
+        "description": "Roll fritto in stile brasiliano con crosta croccante.",
+        "allergens": [
+          1,
+          4,
+          14
+        ],
+        "isSelectableForBox": true,
+        "img": "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    "id": "bevande",
+    "name": "Vino e Bibite",
+    "badge": "Cantina & Soft Drink",
+    "description": "Vini selezionati, birre artigianali e bibite fresche.",
+    "products": [
+      {
+        "id": "bev-1",
+        "name": "Coca-Cola vetro 33 cl",
+        "priceCents": 300,
+        "img": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-2",
+        "name": "Coca-Cola Zero vetro 33 cl",
+        "priceCents": 300,
+        "img": "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-3",
+        "name": "Fanta vetro 33 cl",
+        "priceCents": 300,
+        "img": "https://images.unsplash.com/photo-1624517452488-04869289c4ca?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-4",
+        "name": "Birra Mudita Hygge Doppelbock 33 cl",
+        "priceCents": 600,
+        "img": "https://images.unsplash.com/photo-1608270199187-8c46522f7786?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-5",
+        "name": "Birra Mudita Tarab Hazy IPA 33 cl",
+        "priceCents": 600,
+        "img": "https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-6",
+        "name": "Birra Mudita Tingo Helles 33 cl",
+        "priceCents": 600,
+        "img": "https://images.unsplash.com/photo-1584225064785-c62a8b43d148?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-7",
+        "name": "Chardonnay IGT Principesco 75 cl",
+        "priceCents": 1500,
+        "img": "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "bev-8",
+        "name": "Falanghina frizzante Quid – La Guardiense 75 cl",
+        "priceCents": 2000,
+        "img": "https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?w=600&auto=format&fit=crop&q=80"
+      }
+    ]
+  }
+]
