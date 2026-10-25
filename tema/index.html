@@ -2246,57 +2246,84 @@
 </div>
 
 <script>
-  // Regole orari di servizio (Fuso Europe/Rome)
-  // Pranzo: Giovedì (4), Venerdì (5), Sabato (6) dalle 12:00 alle 14:00
-  let isLunchSimulated = false;
-
-  function isLunchTime() {
-    if (isLunchSimulated) return true;
+  // Regole orari di servizio Sushino (Fuso Europe/Rome)
+  // Orari Ufficiali:
+  // - Pranzo: Giovedì (4), Venerdì (5), Sabato (6) dalle 12:00 alle 14:00
+  // - Cena: Martedì (2) alla Domenica (0) dalle 19:00 alle 23:00 (Lunedì Chiuso)
+  function getServiceStatus() {
     const now = new Date();
-    // Ottieni orario in Europe/Rome
     const romeTimeStr = now.toLocaleString("en-US", { timeZone: "Europe/Rome" });
     const romeDate = new Date(romeTimeStr);
-    const day = romeDate.getDay(); // 0 = Dom, 4 = Gio, 5 = Ven, 6 = Sab
+    const day = romeDate.getDay(); // 0 = Dom, 1 = Lun, 2 = Mar, 3 = Mer, 4 = Gio, 5 = Ven, 6 = Sab
     const hour = romeDate.getHours();
     const min = romeDate.getMinutes();
     const timeNum = hour * 60 + min;
 
     const isLunchDay = (day === 4 || day === 5 || day === 6);
     const isLunchHours = (timeNum >= 12 * 60 && timeNum < 14 * 60);
-    return isLunchDay && isLunchHours;
+    const isLunchActive = isLunchDay && isLunchHours;
+
+    const isDinnerDay = (day !== 1); // Aperto a cena Mar-Dom (Lunedì chiuso)
+    const isDinnerHours = (timeNum >= 19 * 60 && timeNum < 23 * 60);
+    const isDinnerActive = isDinnerDay && isDinnerHours;
+
+    return {
+      isLunchActive,
+      isDinnerActive,
+      isOpen: isLunchActive || isDinnerActive,
+      day,
+      timeNum
+    };
   }
 
-  function applyLunchBlock() {
-    const active = isLunchTime();
+  function isLunchTime() {
+    return getServiceStatus().isLunchActive;
+  }
+
+  function applyServiceStatus() {
+    const status = getServiceStatus();
     const banner = document.getElementById('service-status-banner');
     const statusText = document.getElementById('service-status-text');
 
-    if (active) {
+    if (status.isLunchActive) {
       banner.style.background = '#e6f8f3';
       banner.style.color = '#0e7c5b';
       banner.style.border = '1px solid #b7ecd8';
-      statusText.innerHTML = '🟢 Servizio Pranzo Attivo (12:00 - 14:00) • Tropical Box Pranzo ordinabili';
+      statusText.innerHTML = '🟢 <strong>Aperto ora (Servizio Pranzo 12:00 - 14:00)</strong> • Tropical Box Pranzo e menu disponibili per consegna o asporto';
+    } else if (status.isDinnerActive) {
+      banner.style.background = '#e6f8f3';
+      banner.style.color = '#0e7c5b';
+      banner.style.border = '1px solid #b7ecd8';
+      statusText.innerHTML = '🟢 <strong>Aperto ora (Servizio Cena 19:00 - 23:00)</strong> • Cucina attiva, consegna rapida in tutta Livorno';
     } else {
       banner.style.background = '#fff8e6';
       banner.style.color = '#996300';
       banner.style.border = '1px solid #fde4a6';
-      statusText.innerHTML = '🟡 Fuori orario pranzo (attivo Gio-Sab 12:00-14:00) • Tropical Box Pranzo non ordinabili al momento';
+      const extraInfo = (status.day === 1) 
+        ? 'Lunedì giorno di chiusura settimanale. Riapertura Martedì ore 19:00.' 
+        : 'Siamo aperti a pranzo (Gio-Sab 12-14) e cena (Mar-Dom 19-23). Puoi comunque comporre il tuo carrello in anticipo!';
+      statusText.innerHTML = '🟡 <strong>Al momento la cucina non è in servizio.</strong> ' + extraInfo;
     }
 
-    // Blocca o sblocca tutti i prodotti contrassegnati con data-lunch="true"
+    // Gestione prodotti contrassegnati con data-lunch="true" (attivi solo a pranzo)
     document.querySelectorAll('[data-lunch="true"]').forEach(btn => {
-      if (active) {
+      if (status.isLunchActive) {
         btn.disabled = false;
         btn.title = "";
         btn.style.opacity = "1";
         btn.style.cursor = "pointer";
       } else {
         btn.disabled = true;
-        btn.title = "Ordinabile solo a pranzo (Gio-Sab 12:00-14:00)";
+        btn.title = "Ordinabile solo durante il servizio pranzo (Gio-Sab 12:00-14:00)";
         btn.style.opacity = "0.45";
         btn.style.cursor = "not-allowed";
       }
     });
+  }
+
+  // Alias per retrocompatibilità
+  function applyLunchBlock() {
+    applyServiceStatus();
   }
 
   // Logica Matematica del Carrello e Gestione Box
@@ -2819,7 +2846,7 @@
   renderCart();
 
   // Applica stato orari di servizio iniziale
-  applyLunchBlock();
+  applyServiceStatus();
 </script>
 </body>
 </html>
