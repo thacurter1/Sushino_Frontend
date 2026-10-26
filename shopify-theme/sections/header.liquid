@@ -1,0 +1,34 @@
+<header id="masthead" class="site-header">
+  <div class="container" style="display: flex; align-items: center; justify-content: space-between; padding: 15px 0;">
+    <div class="site-branding">
+      <a href="{{ routes.root_url }}" class="custom-logo-link">
+        <img width="200" height="35" src="{{ 'logo-w.png' | asset_url }}" class="custom-logo" alt="{{ shop.name }}" style="display: block;">
+      </a>
+    </div>
+
+    <nav id="site-navigation" class="main-navigation" style="display: flex; gap: 20px;">
+      <a href="{{ routes.root_url }}" style="color: #fff; text-decoration: none; font-weight: 700;">Menu</a>
+      <a href="#cat33" style="color: #fff; text-decoration: none;">Tropical Box</a>
+      <a href="tel:{{ section.settings.phone_number }}" style="color: #fab900; text-decoration: none; font-weight: 700;">📞 {{ section.settings.phone_number }}</a>
+    </nav>
+
+    <div class="show-minicart" id="open-cart-icon" style="cursor: pointer; position: relative;" onclick="openShopifyCartDrawer()">
+      <span style="font-size: 22px;">🛒</span>
+      <span class="quantity-badge" id="cart-badge-count" style="background: #da1020; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 11px; font-weight: bold; position: absolute; top: -8px; right: -8px;">{{ cart.item_count }}</span>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header Sushino",
+  "settings": [
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Numero Assistenza",
+      "default": "352 005 7782"
+    }
+  ]
+}
+{% endschema %}

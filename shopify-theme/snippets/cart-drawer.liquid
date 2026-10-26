@@ -1,0 +1,146 @@
+<!-- Cassetto Laterale Carrello Connesso a Shopify Cart API (/cart.js) -->
+<div class="cart-drawer-backdrop" id="shopify-cart-backdrop" onclick="if(event.target === this) closeShopifyCartDrawer()">
+  <div class="cart-drawer-panel">
+    <div class="cart-drawer-header">
+      <h3>Il tuo Carrello</h3>
+      <button class="cart-drawer-close" onclick="closeShopifyCartDrawer()">&times;</button>
+    </div>
+    <div class="cart-drawer-body" id="shopify-cart-items-container">
+      <!-- Gli elementi vengono renderizzati dinamicamente via JS da /cart.js -->
+      <p id="shopify-cart-empty-msg" style="color: #666; font-size: 13px;">Caricamento carrello...</p>
+    </div>
+    <div class="cart-drawer-footer" id="shopify-cart-footer" style="display: none;">
+      <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; font-size: 16px;">
+        <span>Totale da Pagare:</span>
+        <span id="shopify-cart-total-display" style="color: #17a5b9;">0,00 €</span>
+      </div>
+      <!-- TASTO DIRETTO AL CHECKOUT SHOPIFY (STILE SLAM JAM) -->
+      <a href="/checkout" class="btn-add-to-cart" style="display: block; text-decoration: none; padding: 14px; text-align: center; box-sizing: border-box;">
+        Procedi al Checkout Shopify ➔
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Cart Button -->
+<div class="floating-cart-pill" id="shopify-floating-cart-btn" onclick="openShopifyCartDrawer()">
+  <span>🛒 Carrello</span>
+  <span class="floating-cart-badge" id="shopify-floating-count">{{ cart.item_count }}</span>
+  <span id="shopify-floating-total" style="margin-left: 4px;">{{ cart.total_price | money }}</span>
+</div>
+
+<script>
+  function formatMoney(cents) {
+    return (cents / 100).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
+  }
+
+  function openShopifyCartDrawer() {
+    document.getElementById('shopify-cart-backdrop').style.display = 'flex';
+    fetchShopifyCart();
+  }
+
+  function closeShopifyCartDrawer() {
+    document.getElementById('shopify-cart-backdrop').style.display = 'none';
+  }
+
+  // Chiusura con tasto Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeShopifyCartDrawer();
+  });
+
+  // Leggi carrello reale da Shopify API
+  async function fetchShopifyCart() {
+    try {
+      const res = await fetch('/cart.js');
+      const cart = await res.json();
+      renderShopifyCart(cart);
+    } catch (err) {
+      console.error("Errore fetch carrello Shopify:", err);
+    }
+  }
+
+  function renderShopifyCart(cart) {
+    const container = document.getElementById('shopify-cart-items-container');
+    const footer = document.getElementById('shopify-cart-footer');
+    const totalEl = document.getElementById('shopify-cart-total-display');
+    const badge = document.getElementById('cart-badge-count');
+    const floatCount = document.getElementById('shopify-floating-count');
+    const floatTotal = document.getElementById('shopify-floating-total');
+
+    badge.textContent = cart.item_count;
+    floatCount.textContent = cart.item_count;
+    floatTotal.textContent = formatMoney(cart.total_price);
+
+    if (cart.items.length === 0) {
+      container.innerHTML = '<p style="color: #666; font-size: 13px;">Nessun prodotto nel carrello.</p>';
+      footer.style.display = 'none';
+      return;
+    }
+
+    footer.style.display = 'block';
+    totalEl.textContent = formatMoney(cart.total_price);
+    container.innerHTML = '';
+
+    cart.items.forEach((item, index) => {
+      const itemRow = document.createElement('div');
+      itemRow.className = 'cart-box-item';
+
+      let propsHtml = '';
+      if (item.properties) {
+        for (const [key, value] of Object.entries(item.properties)) {
+          if (value && !key.startsWith('_')) {
+            propsHtml += `<div style="font-size: 11px; color: #666;">• <strong>${key}:</strong> ${value}</div>`;
+          }
+        }
+      }
+
+      itemRow.innerHTML = `
+        <div class="cart-box-title">
+          <span>${item.product_title}</span>
+          <span style="color: #17a5b9;">${formatMoney(item.final_line_price)}</span>
+        </div>
+        ${propsHtml}
+        <div style="margin-top: 6px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: #444;">Quantità: ${item.quantity}</span>
+          <span class="cart-remove-btn" onclick="changeShopifyItemQty(${index + 1}, 0)">Rimuovi</span>
+        </div>
+      `;
+      container.appendChild(itemRow);
+    });
+  }
+
+  // Modifica quantità o rimuovi articolo
+  async function changeShopifyItemQty(line, qty) {
+    try {
+      const res = await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line: line, quantity: qty })
+      });
+      const cart = await res.json();
+      renderShopifyCart(cart);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // Aggiungi prodotto standard a Shopify
+  async function addProductToShopify(variantId, qty = 1, properties = {}) {
+    try {
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: qty,
+          properties: properties
+        })
+      });
+      if (res.ok) {
+        openShopifyCartDrawer();
+      }
+    } catch (e) {
+      console.error("Errore aggiunta carrello:", e);
+    }
+  }
+</script>

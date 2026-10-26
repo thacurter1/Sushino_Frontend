@@ -1,0 +1,349 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    <title>{{ page_title }} - {{ shop.name }}</title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    <!-- Open Graph / WhatsApp Preview -->
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{{ page_title | default: shop.name }}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{{ page_description | default: shop.name }}">
+    <meta property="og:image" content="{{ 'logo-w.png' | asset_url }}">
+
+    <!-- Google Font: Source Code Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <!-- CSS Ufficiali Quick Delivery Sushino -->
+    <link rel="stylesheet" href="{{ 'quick-delivery-style.css' | asset_url }}">
+    <link rel="stylesheet" href="{{ 'quick-delivery-woocommerce.css' | asset_url }}">
+
+    <style>
+      body {
+        --main-font-family: 'Source Code Pro', monospace;
+        --main-accent-color: #17a5b9;
+        --main-accent-text-color: #fff;
+        --body-background: #ffffff url({{ 'sushino-pattern-sito.png' | asset_url }}) center center / contain repeat-y;
+        --card-background-color: #ffffff;
+        --card-border-radius: 20px;
+        --card-text-color: #000000;
+        --header-background: #17a5b9;
+        --header-text-color: #fff;
+        --header-phone-color: #da1020;
+        --header-minicart-button-badge-backgound: rgb(197, 20, 55);
+        --header-minicart-button-badge-text-color: #fff;
+        --footer-background: #000000;
+        --footer-text-color: #fab900;
+        --shop-card-header-color: #000000;
+        --shop-products-separator-color: #17a5b9;
+        --element-border-radius: 20px;
+        --element-input-background-color: #dcedf2;
+        --element-input-text-color: #000000;
+        --welcome-header-text-color: #ffffff;
+        background: var(--body-background);
+        font-family: var(--main-font-family);
+        margin: 0;
+        padding: 0;
+      }
+      .top-categories-bar {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 12px 16px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+      .top-categories-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        justify-content: flex-start;
+      }
+      .top-categories-list li a {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #f1f7f9;
+        color: #333333;
+        text-decoration: none;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+      .top-categories-list li a:hover,
+      .top-categories-list li.active a {
+        background: #17a5b9;
+        color: #ffffff;
+      }
+      .products-grid-layout {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 35px;
+      }
+      @media (max-width: 991px) {
+        .products-grid-layout { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 767px) {
+        .products-grid-layout { grid-template-columns: 1fr; }
+      }
+      .product-grid-card {
+        background: #ffffff;
+        border: 1px solid #eef2f5;
+        border-radius: 18px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      }
+      .product-grid-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+      .product-thumb-top img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+      }
+      .product-body-content {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+      }
+      .product-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+      }
+      .product-price-badge {
+        font-size: 14px;
+        font-weight: 700;
+        color: #17a5b9;
+        margin-bottom: 8px;
+      }
+      .product-description {
+        font-size: 12px;
+        color: #666;
+        line-height: 1.4;
+        margin-bottom: 14px;
+      }
+      .btn-add-to-cart {
+        background: #17a5b9;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        transition: background 0.2s;
+      }
+      .btn-add-to-cart:hover { background: #138797; }
+
+      /* Modale Box Configurator */
+      .qd-modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6);
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+      }
+      .qd-modal {
+        background: #ffffff;
+        border-radius: 20px;
+        max-width: 480px;
+        width: 100%;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .qd-modal-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .qd-modal-header h3 { margin: 0; font-size: 16px; color: #111; }
+      .qd-modal-close {
+        background: none; border: none; font-size: 24px; cursor: pointer; color: #888;
+      }
+      .qd-modal-body {
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .qd-modal-footer {
+        padding: 16px 20px;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fdfdfd;
+      }
+      .slot-counter {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: #e6f8fa;
+        color: #17a5b9;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+      .slot-plate-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed #eee;
+        font-size: 13px;
+      }
+      .slot-ctrl-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 1px solid #17a5b9;
+        background: #fff;
+        color: #17a5b9;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .slot-ctrl-btn:hover { background: #17a5b9; color: #fff; }
+
+      /* Floating Cart & Drawer */
+      .floating-cart-pill {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #17a5b9;
+        color: #ffffff;
+        padding: 14px 22px;
+        border-radius: 40px;
+        box-shadow: 0 8px 25px rgba(23, 165, 185, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        z-index: 999;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .floating-cart-badge {
+        background: #da1020;
+        color: #fff;
+        border-radius: 50%;
+        padding: 2px 7px;
+        font-size: 12px;
+      }
+      .cart-drawer-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 10000;
+        display: none;
+        align-items: stretch;
+        justify-content: flex-end;
+      }
+      .cart-drawer-panel {
+        background: #ffffff;
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+      }
+      .cart-drawer-header {
+        padding: 18px 20px;
+        background: #17a5b9;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .cart-drawer-header h3 { margin: 0; font-size: 16px; }
+      .cart-drawer-close {
+        background: none; border: none; font-size: 26px; color: #fff; cursor: pointer;
+      }
+      .cart-drawer-body {
+        padding: 20px;
+        flex-grow: 1;
+        overflow-y: auto;
+      }
+      .cart-drawer-footer {
+        padding: 20px;
+        background: #fdfdfd;
+        border-top: 1px solid #eee;
+      }
+      .cart-box-item {
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+        font-size: 13px;
+      }
+      .cart-box-title {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      .cart-box-plates, .cart-box-extras {
+        font-size: 11px;
+        color: #666;
+        margin-bottom: 6px;
+      }
+      .cart-remove-btn {
+        color: #da1020;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+      }
+    </style>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="theme-sushino-shopify">
+    <div id="page" class="site">
+      {% section 'header' %}
+
+      <main id="MainContent" class="site-content" role="main">
+        <div class="container">
+          {{ content_for_layout }}
+        </div>
+      </main>
+
+      {% section 'footer' %}
+    </div>
+
+    <!-- Modale Box Configurator -->
+    {% render 'slot-box-modal' %}
+
+    <!-- Cart Drawer Shopify -->
+    {% render 'cart-drawer' %}
+  </body>
+</html>

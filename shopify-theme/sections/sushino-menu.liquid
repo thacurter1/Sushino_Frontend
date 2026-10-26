@@ -1,0 +1,102 @@
+<div class="sushino-menu-section" style="margin-top: 20px;">
+
+  <!-- AVVISO TOP SUSHINO & ORARI -->
+  <div class="top-message">
+    <div class="card" style="background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
+      <p style="margin: 0 0 10px 0; font-size: 13px; line-height: 1.5;">
+        <strong>Benvenuto su Sushino!</strong><br>
+        Siamo aperti a cena dal Martedì alla Domenica (19:00 - 23:00) e a pranzo dal Giovedì al Sabato (12:00 - 14:00). Consegniamo in tutta Livorno.<br>
+        Hai bisogno di aiuto? <a href="tel:3520057782" style="color: #17a5b9; font-weight: bold;">Clicca qui</a> per ricevere assistenza.<br><br>
+        Buona #sushinoexperience! 🛵 🍣 🌴
+      </p>
+      <div id="service-status-banner" style="padding: 10px 14px; border-radius: 12px; font-size: 12px; background: #e6f8f3; color: #0e7c5b; border: 1px solid #b7ecd8;">
+        🟢 <strong>Cucina Aperta</strong> • Consegna a domicilio e asporto attivi su Shopify
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRA CATEGORIE ORIZZONTALE -->
+  <nav class="top-categories-bar" aria-label="Menu categorie">
+    <ul class="top-categories-list">
+      {% for collection in collections %}
+        {% if collection.products_count > 0 %}
+          <li><a href="#cat-{{ collection.id }}">{{ collection.title }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <!-- GRIGLIA PRODOTTI DINAMICA DA COLLEZIONI SHOPIFY -->
+  <div class="products card" style="background: #fff; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
+    <h2 style="font-size: 20px; margin: 0 0 20px 0; color: #000;">Il Nostro Menu</h2>
+
+    {% for collection in collections %}
+      {% if collection.products_count > 0 %}
+        <div class="category-products" id="cat-{{ collection.id }}" style="margin-bottom: 40px;">
+          <div class="category-title" style="margin-bottom: 20px; border-bottom: 2px solid #17a5b9; padding-bottom: 8px;">
+            <h3 style="margin: 0; font-size: 18px; color: #17a5b9;">{{ collection.title }}</h3>
+            {% if collection.description != blank %}
+              <p style="margin: 6px 0 0 0; font-size: 12px; color: #666;">{{ collection.description }}</p>
+            {% endif %}
+          </div>
+
+          <div class="products-grid-layout">
+            {% for product in collection.products %}
+              {% assign is_box = false %}
+              {% assign slots = 0 %}
+              {% if product.tags contains 'box-3' %}
+                {% assign is_box = true %}
+                {% assign slots = 3 %}
+              {% elsif product.tags contains 'box-5' %}
+                {% assign is_box = true %}
+                {% assign slots = 5 %}
+              {% elsif product.tags contains 'box-8' %}
+                {% assign is_box = true %}
+                {% assign slots = 8 %}
+              {% elsif product.tags contains 'box-lunch' %}
+                {% assign is_box = true %}
+                {% assign slots = 1 %}
+              {% endif %}
+
+              <div class="product-grid-card">
+                <div class="product-thumb-top">
+                  {% if product.featured_image %}
+                    <img loading="lazy" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}">
+                  {% else %}
+                    <img loading="lazy" src="{{ 'logo-w.png' | asset_url }}" alt="{{ product.title | escape }}" style="object-fit: contain; padding: 30px; background: #17a5b9;">
+                  {% endif %}
+                </div>
+                <div class="product-body-content">
+                  <div>
+                    <div class="product-name">{{ product.title }}</div>
+                    <div class="product-price-badge">{{ product.price | money }}</div>
+                    <div class="product-description">
+                      {{ product.description | strip_html | truncate: 120 }}
+                    </div>
+                  </div>
+
+                  {% if is_box %}
+                    <button type="button" class="btn-add-to-cart" onclick="openBoxModalFor('{{ product.first_available_variant.id }}', '{{ product.title | escape }}', {{ slots }}, {{ product.price }}, {% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %})">
+                      Configura e Aggiungi
+                    </button>
+                  {% else %}
+                    <button type="button" class="btn-add-to-cart" onclick="addProductToShopify('{{ product.first_available_variant.id }}', 1)">
+                      Aggiungi al Carrello
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Sushino Menu Dinamico",
+  "settings": []
+}
+{% endschema %}

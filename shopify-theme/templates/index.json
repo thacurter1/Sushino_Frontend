@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "menu": {
+      "type": "sushino-menu",
+      "settings": {}
+    }
+  },
+  "order": [
+    "menu"
+  ]
+}
