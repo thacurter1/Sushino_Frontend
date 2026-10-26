@@ -6,7 +6,6 @@
       <button class="cart-drawer-close" onclick="closeShopifyCartDrawer()">&times;</button>
     </div>
     <div class="cart-drawer-body" id="shopify-cart-items-container">
-      <!-- Gli elementi vengono renderizzati dinamicamente via JS da /cart.js -->
       <p id="shopify-cart-empty-msg" style="color: #666; font-size: 13px;">Caricamento carrello...</p>
     </div>
     <div class="cart-drawer-footer" id="shopify-cart-footer" style="display: none;">
@@ -52,6 +51,7 @@
   async function fetchShopifyCart() {
     try {
       const res = await fetch('/cart.js');
+      if (!res.ok) throw new Error("Errore durante il caricamento del carrello");
       const cart = await res.json();
       renderShopifyCart(cart);
     } catch (err) {
@@ -59,6 +59,8 @@
     }
   }
 
+  // F7: Render del carrello con textContent (prevenzione DOM XSS e caratteri speciali)
+  // F9: Rimozione basata su item.key stabile anziché indice posizionale
   function renderShopifyCart(cart) {
     const container = document.getElementById('shopify-cart-items-container');
     const footer = document.getElementById('shopify-cart-footer');
@@ -81,50 +83,79 @@
     totalEl.textContent = formatMoney(cart.total_price);
     container.innerHTML = '';
 
-    cart.items.forEach((item, index) => {
+    cart.items.forEach((item) => {
       const itemRow = document.createElement('div');
       itemRow.className = 'cart-box-item';
 
-      let propsHtml = '';
+      const titleRow = document.createElement('div');
+      titleRow.className = 'cart-box-title';
+
+      const titleSpan = document.createElement('span');
+      titleSpan.textContent = item.product_title; // Sicuro da XSS
+
+      const priceSpan = document.createElement('span');
+      priceSpan.style.color = '#17a5b9';
+      priceSpan.textContent = formatMoney(item.final_line_price);
+
+      titleRow.appendChild(titleSpan);
+      titleRow.appendChild(priceSpan);
+      itemRow.appendChild(titleRow);
+
       if (item.properties) {
         for (const [key, value] of Object.entries(item.properties)) {
           if (value && !key.startsWith('_')) {
-            propsHtml += `<div style="font-size: 11px; color: #666;">• <strong>${key}:</strong> ${value}</div>`;
+            const propDiv = document.createElement('div');
+            propDiv.style.fontSize = '11px';
+            propDiv.style.color = '#666';
+            propDiv.textContent = `• ${key}: ${value}`; // Sicuro da XSS
+            itemRow.appendChild(propDiv);
           }
         }
       }
 
-      itemRow.innerHTML = `
-        <div class="cart-box-title">
-          <span>${item.product_title}</span>
-          <span style="color: #17a5b9;">${formatMoney(item.final_line_price)}</span>
-        </div>
-        ${propsHtml}
-        <div style="margin-top: 6px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 12px; color: #444;">Quantità: ${item.quantity}</span>
-          <span class="cart-remove-btn" onclick="changeShopifyItemQty(${index + 1}, 0)">Rimuovi</span>
-        </div>
-      `;
+      const actionsDiv = document.createElement('div');
+      actionsDiv.style.marginTop = '6px';
+      actionsDiv.style.display = 'flex';
+      actionsDiv.style.justifyContent = 'space-between';
+      actionsDiv.style.alignItems = 'center';
+
+      const qtySpan = document.createElement('span');
+      qtySpan.style.fontSize = '12px';
+      qtySpan.style.color = '#444';
+      qtySpan.textContent = `Quantità: ${item.quantity}`;
+
+      const removeBtn = document.createElement('span');
+      removeBtn.className = 'cart-remove-btn';
+      removeBtn.textContent = 'Rimuovi';
+      // F9: Rimozione sicura per chiave Shopify (item.key)
+      removeBtn.addEventListener('click', () => changeShopifyItemKey(item.key, 0));
+
+      actionsDiv.appendChild(qtySpan);
+      actionsDiv.appendChild(removeBtn);
+      itemRow.appendChild(actionsDiv);
+
       container.appendChild(itemRow);
     });
   }
 
-  // Modifica quantità o rimuovi articolo
-  async function changeShopifyItemQty(line, qty) {
+  // Modifica quantità con key univoca riga (F9)
+  async function changeShopifyItemKey(key, qty) {
     try {
       const res = await fetch('/cart/change.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ line: line, quantity: qty })
+        body: JSON.stringify({ id: key, quantity: qty })
       });
+      if (!res.ok) throw new Error("Errore aggiornamento carrello");
       const cart = await res.json();
       renderShopifyCart(cart);
     } catch (e) {
       console.error(e);
+      alert("Impossibile aggiornare la riga del carrello. Riprova.");
     }
   }
 
-  // Aggiungi prodotto standard a Shopify
+  // F8: Aggiunta con gestione errori e feedback
   async function addProductToShopify(variantId, qty = 1, properties = {}) {
     try {
       const res = await fetch('/cart/add.js', {
@@ -136,11 +167,15 @@
           properties: properties
         })
       });
-      if (res.ok) {
-        openShopifyCartDrawer();
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert("Impossibile aggiungere il prodotto: " + (errorData.description || "verificare disponibilità."));
+        return;
       }
+      openShopifyCartDrawer();
     } catch (e) {
       console.error("Errore aggiunta carrello:", e);
+      alert("Errore di connessione. Verifica la connessione internet.");
     }
   }
 </script>

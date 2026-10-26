@@ -3,7 +3,7 @@
   <div class="qd-modal">
     <div class="qd-modal-header">
       <h3 id="qd-modal-title">Componi Tropical Box</h3>
-      <button class="qd-modal-close" onclick="closeBoxModal()">&times;</button>
+      <button type="button" class="qd-modal-close" id="qd-modal-close-btn">&times;</button>
     </div>
     <div class="qd-modal-body">
       <div>
@@ -76,10 +76,10 @@
 
     <div class="qd-modal-footer">
       <div>
-        <span style="font-size: 11px; color: #888; display: block;">Totale box:</span>
+        <span style="font-size: 11px; color: #888; display: block;">Totale stimato box:</span>
         <span id="qd-modal-total" style="font-size: 18px; font-weight: bold; color: #17a5b9;">0,00 €</span>
       </div>
-      <button class="btn-add-to-cart" id="qd-modal-submit" disabled onclick="addConfiguredBoxToShopify()">
+      <button type="button" class="btn-add-to-cart" id="qd-modal-submit" disabled>
         Seleziona tutti i piatti
       </button>
     </div>
@@ -149,6 +149,7 @@
     document.getElementById('qd-opt-chopsticks').value = '1';
 
     renderPlatesList();
+    updatePlateCounts(); // F5: Reset esplicito contatori piatti
     updateBoxTotal();
     document.getElementById('shopify-box-modal').style.display = 'flex';
   }
@@ -157,6 +158,17 @@
     document.getElementById('shopify-box-modal').style.display = 'none';
   }
 
+  const closeBtn = document.getElementById('qd-modal-close-btn');
+  if (closeBtn) closeBtn.addEventListener('click', closeBoxModal);
+
+  const modalOverlay = document.getElementById('shopify-box-modal');
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeBoxModal();
+    });
+  }
+
+  // F4: Creazione sicura tramite DOM e addEventListener (zero errori di escape con apostrofi tipo Olio's Uramaki)
   function renderPlatesList() {
     const container = document.getElementById('qd-plate-list');
     container.innerHTML = '';
@@ -165,14 +177,39 @@
     pool.forEach(plate => {
       const row = document.createElement('div');
       row.className = 'slot-plate-row';
-      row.innerHTML = `
-        <span>${plate}</span>
-        <div>
-          <button type="button" class="slot-ctrl-btn" onclick="modifyPlateCount('${plate}', -1)">-</button>
-          <span id="plate-count-${plate.replace(/[^a-zA-Z0-9]/g, '')}" style="display:inline-block; width: 22px; text-align: center; font-weight: bold;">0</span>
-          <button type="button" class="slot-ctrl-btn" onclick="modifyPlateCount('${plate}', 1)">+</button>
-        </div>
-      `;
+
+      const label = document.createElement('span');
+      label.textContent = plate; // Sicuro contro XSS
+
+      const ctrlDiv = document.createElement('div');
+
+      const btnSub = document.createElement('button');
+      btnSub.type = 'button';
+      btnSub.className = 'slot-ctrl-btn';
+      btnSub.textContent = '-';
+      btnSub.addEventListener('click', () => modifyPlateCount(plate, -1));
+
+      const countSpan = document.createElement('span');
+      countSpan.className = 'plate-counter-span';
+      countSpan.dataset.plate = plate;
+      countSpan.style.display = 'inline-block';
+      countSpan.style.width = '24px';
+      countSpan.style.textAlign = 'center';
+      countSpan.style.fontWeight = 'bold';
+      countSpan.textContent = '0';
+
+      const btnAdd = document.createElement('button');
+      btnAdd.type = 'button';
+      btnAdd.className = 'slot-ctrl-btn';
+      btnAdd.textContent = '+';
+      btnAdd.addEventListener('click', () => modifyPlateCount(plate, 1));
+
+      ctrlDiv.appendChild(btnSub);
+      ctrlDiv.appendChild(countSpan);
+      ctrlDiv.appendChild(btnAdd);
+
+      row.appendChild(label);
+      row.appendChild(ctrlDiv);
       container.appendChild(row);
     });
   }
@@ -192,10 +229,9 @@
     const counts = {};
     currentBox.selectedPlates.forEach(p => counts[p] = (counts[p] || 0) + 1);
 
-    const pool = currentBox.isLunch ? LUNCH_CHOICES : EVENING_CHOICES;
-    pool.forEach(p => {
-      const el = document.getElementById('plate-count-' + p.replace(/[^a-zA-Z0-9]/g, ''));
-      if (el) el.textContent = counts[p] || 0;
+    document.querySelectorAll('.plate-counter-span').forEach(el => {
+      const p = el.dataset.plate;
+      el.textContent = counts[p] || 0;
     });
 
     const badge = document.getElementById('qd-slot-counter');
@@ -238,8 +274,18 @@
     if (el) el.addEventListener('change', updateBoxTotal);
   });
 
-  // Aggiungi a Shopify con Line-Item Properties
+  const submitBtn = document.getElementById('qd-modal-submit');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', addConfiguredBoxToShopify);
+  }
+
+  // F3: Validazione prima dell'invio ad API Shopify
   async function addConfiguredBoxToShopify() {
+    if (currentBox.selectedPlates.length !== currentBox.slotsRequired) {
+      alert(`Seleziona esattamente ${currentBox.slotsRequired} piatti prima di aggiungere la box.`);
+      return;
+    }
+
     const counts = {};
     currentBox.selectedPlates.forEach(p => counts[p] = (counts[p] || 0) + 1);
     const platesText = Object.entries(counts).map(([k, v]) => `${v}x ${k}`).join(', ');
