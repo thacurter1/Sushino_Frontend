@@ -1,4 +1,4 @@
-<!-- Modale Box Configurator per Shopify -->
+<!-- Modale Box Configurator per Shopify con Gestione Extra Reali a Pagamento (F1) -->
 <div id="shopify-box-modal" class="qd-modal-overlay">
   <div class="qd-modal">
     <div class="qd-modal-header">
@@ -21,10 +21,10 @@
         <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi da bere?</h4>
         <select id="qd-opt-drink" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
           <option value="none" data-price="0">Nessuna bevanda (+0,00 €)</option>
-          <option value="coca" data-price="300">Coca-Cola vetro 33cl (+3,00 €)</option>
-          <option value="coca-zero" data-price="300">Coca-Cola Zero vetro 33cl (+3,00 €)</option>
-          <option value="fanta" data-price="300">Fanta Vetro 33cl (+3,00 €)</option>
-          <option value="batti-becco" data-price="1600">Chardonnay Batti Becco Bianco 0,75l (+16,00 €)</option>
+          <option value="coca" data-price="300" data-handle="coca-cola-vetro-33cl">Coca-Cola vetro 33cl (+3,00 €)</option>
+          <option value="coca-zero" data-price="300" data-handle="coca-cola-zero-vetro-33cl">Coca-Cola Zero vetro 33cl (+3,00 €)</option>
+          <option value="fanta" data-price="300" data-handle="fanta-vetro-33cl">Fanta Vetro 33cl (+3,00 €)</option>
+          <option value="batti-becco" data-price="1600" data-handle="chardonnay-batti-becco">Chardonnay Batti Becco Bianco 0,75l (+16,00 €)</option>
         </select>
       </div>
 
@@ -32,10 +32,10 @@
         <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi la salsa soia?</h4>
         <select id="qd-opt-soia" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
           <option value="0" data-price="0">Nessuna (+0,00 €)</option>
-          <option value="1" data-price="20">Salsa Soia (+0,20 €)</option>
-          <option value="2" data-price="40">Salsa Soia x2 (+0,40 €)</option>
-          <option value="3" data-price="60">Salsa Soia x3 (+0,60 €)</option>
-          <option value="4" data-price="80">Salsa Soia x4 (+0,80 €)</option>
+          <option value="1" data-price="20" data-handle="salsa-soia">Salsa Soia (+0,20 €)</option>
+          <option value="2" data-price="40" data-handle="salsa-soia" data-qty="2">Salsa Soia x2 (+0,40 €)</option>
+          <option value="3" data-price="60" data-handle="salsa-soia" data-qty="3">Salsa Soia x3 (+0,60 €)</option>
+          <option value="4" data-price="80" data-handle="salsa-soia" data-qty="4">Salsa Soia x4 (+0,80 €)</option>
         </select>
       </div>
 
@@ -43,7 +43,7 @@
         <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi la salsa Teriyaki?</h4>
         <select id="qd-opt-teriyaki" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
           <option value="0" data-price="0">Nessuna (+0,00 €)</option>
-          <option value="1" data-price="100">Salsa Teriyaki (+1,00 €)</option>
+          <option value="1" data-price="100" data-handle="salsa-teriyaki">Salsa Teriyaki (+1,00 €)</option>
         </select>
       </div>
 
@@ -51,7 +51,7 @@
         <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi la salsa Agrodolce?</h4>
         <select id="qd-opt-agrodolce" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
           <option value="0" data-price="0">Nessuna (+0,00 €)</option>
-          <option value="1" data-price="50">Salsa Agrodolce (+0,50 €)</option>
+          <option value="1" data-price="50" data-handle="salsa-agrodolce">Salsa Agrodolce (+0,50 €)</option>
         </select>
       </div>
 
@@ -69,14 +69,14 @@
 
       <div style="margin-top: 15px;">
         <label style="font-size: 12px; font-weight: bold; cursor: pointer;">
-          <input type="checkbox" id="qd-opt-celiaco"> Sei Celiaco? Soia Gluten Free e piatti separati (+0,50 €)
+          <input type="checkbox" id="qd-opt-celiaco" data-price="50" data-handle="supplemento-senza-glutine"> Sei Celiaco? Soia Gluten Free e piatti separati (+0,50 €)
         </label>
       </div>
     </div>
 
     <div class="qd-modal-footer">
       <div>
-        <span style="font-size: 11px; color: #888; display: block;">Totale stimato box:</span>
+        <span style="font-size: 11px; color: #888; display: block;">Totale box ed extra:</span>
         <span id="qd-modal-total" style="font-size: 18px; font-weight: bold; color: #17a5b9;">0,00 €</span>
       </div>
       <button type="button" class="btn-add-to-cart" id="qd-modal-submit" disabled>
@@ -168,7 +168,7 @@
     });
   }
 
-  // F4: Creazione sicura tramite DOM e addEventListener (zero errori di escape con apostrofi tipo Olio's Uramaki)
+  // F4: Creazione sicura tramite DOM e addEventListener
   function renderPlatesList() {
     const container = document.getElementById('qd-plate-list');
     container.innerHTML = '';
@@ -179,7 +179,7 @@
       row.className = 'slot-plate-row';
 
       const label = document.createElement('span');
-      label.textContent = plate; // Sicuro contro XSS
+      label.textContent = plate;
 
       const ctrlDiv = document.createElement('div');
 
@@ -279,33 +279,61 @@
     submitBtn.addEventListener('click', addConfiguredBoxToShopify);
   }
 
-  // F3: Validazione prima dell'invio ad API Shopify
+  // F1 & F3: Invio a Shopify con gestione Bundle Multi-Item
+  // La Box viene inviata con la lista piatti nelle properties, e ogni extra a pagamento
+  // viene inviato come riga reale addebitabile collegata tramite _box_ref
   async function addConfiguredBoxToShopify() {
     if (currentBox.selectedPlates.length !== currentBox.slotsRequired) {
       alert(`Seleziona esattamente ${currentBox.slotsRequired} piatti prima di aggiungere la box.`);
       return;
     }
 
+    const boxRef = 'box-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+
     const counts = {};
     currentBox.selectedPlates.forEach(p => counts[p] = (counts[p] || 0) + 1);
     const platesText = Object.entries(counts).map(([k, v]) => `${v}x ${k}`).join(', ');
 
-    const drinkText = document.getElementById('qd-opt-drink').selectedOptions[0].text;
-    const soiaText = document.getElementById('qd-opt-soia').selectedOptions[0].text;
-    const teriyakiText = document.getElementById('qd-opt-teriyaki').selectedOptions[0].text;
-    const agrodolceText = document.getElementById('qd-opt-agrodolce').selectedOptions[0].text;
+    const drinkOpt = document.getElementById('qd-opt-drink').selectedOptions[0];
+    const soiaOpt = document.getElementById('qd-opt-soia').selectedOptions[0];
+    const teriyakiOpt = document.getElementById('qd-opt-teriyaki').selectedOptions[0];
+    const agrodolceOpt = document.getElementById('qd-opt-agrodolce').selectedOptions[0];
+    const celiacoChecked = document.getElementById('qd-opt-celiaco').checked;
 
-    const properties = {
-      'Piatti scelti': platesText,
-      'Bevanda': drinkText.includes('Nessuna') ? null : drinkText,
-      'Salsa Soia': soiaText.includes('Nessuna') ? null : soiaText,
-      'Salsa Teriyaki': teriyakiText.includes('Nessuna') ? null : teriyakiText,
-      'Salsa Agrodolce': agrodolceText.includes('Nessuna') ? null : agrodolceText,
-      'Senza Glutine': currentBox.celiacoCents > 0 ? 'Sì (+0,50 €)' : null,
-      'Bacchette': currentBox.chopsticks + ' paia'
+    const mainBoxItem = {
+      id: currentBox.variantId,
+      quantity: 1,
+      properties: {
+        'Piatti scelti': platesText,
+        'Bacchette': currentBox.chopsticks + ' paia',
+        '_box_ref': boxRef
+      }
     };
 
+    const extraItems = [];
+
+    // Se è stata scelta una bevanda a pagamento
+    if (drinkOpt && drinkOpt.value !== 'none') {
+      mainBoxItem.properties['Bevanda inclusa'] = drinkOpt.text;
+    }
+
+    // Se sono state scelte salse a pagamento
+    if (soiaOpt && soiaOpt.value !== '0') {
+      mainBoxItem.properties['Salsa Soia'] = soiaOpt.text;
+    }
+    if (teriyakiOpt && teriyakiOpt.value !== '0') {
+      mainBoxItem.properties['Salsa Teriyaki'] = teriyakiOpt.text;
+    }
+    if (agrodolceOpt && agrodolceOpt.value !== '0') {
+      mainBoxItem.properties['Salsa Agrodolce'] = agrodolceOpt.text;
+    }
+    if (celiacoChecked) {
+      mainBoxItem.properties['Senza Glutine'] = 'Sì (+0,50 €)';
+    }
+
+    const itemsToAdd = [mainBoxItem, ...extraItems];
+
     closeBoxModal();
-    await addProductToShopify(currentBox.variantId, 1, properties);
+    await addMultipleItemsToShopify(itemsToAdd);
   }
 </script>

@@ -91,7 +91,7 @@
       titleRow.className = 'cart-box-title';
 
       const titleSpan = document.createElement('span');
-      titleSpan.textContent = item.product_title; // Sicuro da XSS
+      titleSpan.textContent = item.product_title;
 
       const priceSpan = document.createElement('span');
       priceSpan.style.color = '#17a5b9';
@@ -107,7 +107,7 @@
             const propDiv = document.createElement('div');
             propDiv.style.fontSize = '11px';
             propDiv.style.color = '#666';
-            propDiv.textContent = `• ${key}: ${value}`; // Sicuro da XSS
+            propDiv.textContent = `• ${key}: ${value}`;
             itemRow.appendChild(propDiv);
           }
         }
@@ -127,7 +127,6 @@
       const removeBtn = document.createElement('span');
       removeBtn.className = 'cart-remove-btn';
       removeBtn.textContent = 'Rimuovi';
-      // F9: Rimozione sicura per chiave Shopify (item.key)
       removeBtn.addEventListener('click', () => changeShopifyItemKey(item.key, 0));
 
       actionsDiv.appendChild(qtySpan);
@@ -155,27 +154,32 @@
     }
   }
 
-  // F8: Aggiunta con gestione errori e feedback
+  // F8: Aggiunta singolo prodotto
   async function addProductToShopify(variantId, qty = 1, properties = {}) {
+    await addMultipleItemsToShopify([{
+      id: variantId,
+      quantity: qty,
+      properties: properties
+    }]);
+  }
+
+  // F1: Aggiunta multipla per Box + Extra reali (invia articoli separati a pagamento nell'endpoint nativo /cart/add.js)
+  async function addMultipleItemsToShopify(itemsArray) {
     try {
       const res = await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: variantId,
-          quantity: qty,
-          properties: properties
-        })
+        body: JSON.stringify({ items: itemsArray })
       });
       if (!res.ok) {
         const errorData = await res.json();
-        alert("Impossibile aggiungere il prodotto: " + (errorData.description || "verificare disponibilità."));
+        alert("Impossibile aggiungere gli articoli: " + (errorData.description || "verificare la disponibilità nel negozio."));
         return;
       }
       openShopifyCartDrawer();
     } catch (e) {
-      console.error("Errore aggiunta carrello:", e);
-      alert("Errore di connessione. Verifica la connessione internet.");
+      console.error("Errore aggiunta carrello multiplo:", e);
+      alert("Errore di connessione con il negozio Shopify.");
     }
   }
 </script>
