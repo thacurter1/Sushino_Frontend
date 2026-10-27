@@ -1,0 +1,110 @@
+/* Product images stay centered and visible across desktop and mobile. */
+.product-grid-card .product-thumb-top {
+  background: #fff;
+}
+
+.product-grid-card .product-thumb-top img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  box-sizing: border-box;
+  object-fit: contain;
+  object-position: center;
+}
+
+.product-grid-card:hover .product-thumb-top img {
+  transform: none;
+}
+
+@media (max-width: 767px) {
+  .products-grid-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .product-grid-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(96px, 35%);
+    align-items: stretch;
+    min-width: 0;
+    border-radius: 18px;
+  }
+
+  .product-grid-card .product-thumb-top {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    min-height: 140px;
+    padding: 10px 10px 10px 4px;
+    box-sizing: border-box;
+  }
+
+  .product-grid-card .product-thumb-top img {
+    width: 100%;
+    height: clamp(100px, 32vw, 145px);
+    max-height: 145px;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .product-grid-card .product-thumb-top img.sushino-foto-mancante {
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .product-grid-card .product-body-content {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    padding: 16px 0 16px 16px;
+    gap: 12px;
+  }
+
+  .product-grid-card .product-body-content > div:first-child {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 8px;
+    row-gap: 6px;
+    align-items: baseline;
+    min-width: 0;
+  }
+
+  .product-grid-card .product-name {
+    grid-column: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .product-grid-card .product-price-badge {
+    grid-column: 2;
+    margin: 0;
+    color: #111;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .product-grid-card .product-description {
+    grid-column: 1 / -1;
+    display: block;
+    overflow: visible;
+    margin: 0;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.45;
+    -webkit-line-clamp: unset;
+  }
+
+  .product-grid-card .product-body-content .btn-add-to-cart {
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+}
