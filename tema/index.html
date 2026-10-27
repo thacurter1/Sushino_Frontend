@@ -462,6 +462,122 @@
       font-size: 12px;
       font-weight: 900;
     }
+
+    /* ========================================================
+       OTTIMIZZAZIONE HEADER & LOGO MOBILE
+       ======================================================== */
+    .site-header {
+      background: #17a5b9 !important;
+      padding: 12px 16px !important;
+    }
+    .site-header .container {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      min-height: auto !important;
+    }
+    .site-header .site-branding {
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .site-header .site-branding .custom-logo {
+      height: 42px !important;
+      width: auto !important;
+      max-height: 42px !important;
+      object-fit: contain !important;
+      display: block !important;
+    }
+
+    @media only screen and (max-width: 767px) {
+      .site-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+        height: auto !important;
+        padding: 10px 14px !important;
+      }
+      .site-header .site-branding .custom-logo {
+        height: 34px !important;
+        max-height: 34px !important;
+      }
+      .site-header .main-navigation {
+        display: none !important;
+      }
+      .site-header .header-phone-numbers {
+        display: none !important;
+      }
+      .site-header .show-minicart {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 50% !important;
+        cursor: pointer !important;
+        position: relative !important;
+      }
+      .site-header .show-minicart::after {
+        content: '🛒' !important;
+        font-size: 18px !important;
+      }
+    }
+
+    /* ========================================================
+       RETTANGOLO BIANCO ELEGANTE PER SEZIONE "PRODOTTI"
+       ======================================================== */
+    .products.card {
+      padding: 0 !important;
+      width: 100% !important;
+    }
+    .products.card > .card-body {
+      background: #ffffff !important;
+      border-radius: 20px !important;
+      padding: 24px !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+      border: 1px solid #edf4f6 !important;
+    }
+    .products-header-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid #f0f6f8;
+    }
+    .products-header-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111827;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+    .products-search-wrap {
+      flex: 1;
+      max-width: 380px;
+      min-width: 240px;
+    }
+    .products-search-wrap input {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 25px;
+      border: 1px solid #dcedf2;
+      background: #f8fafc;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    .products-search-wrap input:focus {
+      border-color: #17a5b9;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(23, 165, 185, 0.15);
+    }
+
   </style>
 </head>
 
@@ -549,15 +665,16 @@
 
       <div class="main-layout" style="display: block;">
 
-        <!-- SEZIONE PRODOTTI CENTRATA E PERFETTAMENTE BILANCIATA A 3 COLONNE -->
-        <div class="products card" style="width: 100%;">
-          <h2>Prodotti</h2>
+        <!-- SEZIONE PRODOTTI RACCHIUSA NEL RETTANGOLO BIANCO ELEGANTE -->
+        <div class="products card">
           <div class="card-body">
-
-            <!-- BARRA RICERCA ORIGINALE -->
-            <div class="search-box">
-              <input class="search-box-input" id="search-input" type="text" placeholder="Cosa stai cercando?">
-              <span class="search-box-icon search">🔍</span>
+            
+            <!-- HEADER DELLA SEZIONE: TITOLO PRODOTTI + RICERCA NEL RETTANGOLO -->
+            <div class="products-header-box">
+              <h2 class="products-header-title">Prodotti</h2>
+              <div class="products-search-wrap">
+                <input class="search-box-input" id="search-input" type="text" placeholder="🔍 Cerca nel menu (es. Salmon, Tempura...)">
+              </div>
             </div>
 
             
