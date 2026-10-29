@@ -138,3 +138,9 @@
 .site-header .site-branding .custom-logo { max-width: 240px; height: auto; }
 .site-content { margin-top: 0 !important; }
 .site-header .show-minicart::after { content: none !important; }
+
+/* Elimina lo spazio superiore e ingrandisce il logo desktop. */
+body.theme-sushino-shopify { margin: 0; }
+@media (min-width: 1200px) {
+  .site-header .site-branding .custom-logo { width: 300px; max-width: 300px; height: auto; }
+}
