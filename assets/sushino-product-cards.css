@@ -108,3 +108,33 @@
     line-height: 1.25;
   }
 }
+
+/* Header e navigazione compatta su dispositivi mobili. */
+.sushino-mobile-phone, .sushino-mobile-categories { display: none; }
+.sushino-header-phone { color: #fab900; text-decoration: none; font-weight: 700; white-space: nowrap; }
+.category-products { scroll-margin-top: 85px; }
+@media (max-width: 1199px) {
+  .site-header { height: auto !important; padding: 8px 12px !important; }
+  .site-header .container { height: auto !important; min-height: 48px !important; padding: 0 !important; gap: 8px; }
+  .site-header .site-branding { flex: 1 1 auto; min-width: 0; margin: 0 !important; }
+  .site-header .site-branding .custom-logo { display: block; width: min(115px, 100%) !important; height: auto !important; max-height: 36px !important; }
+  .site-header .main-navigation { display: none !important; }
+  .site-header .sushino-mobile-phone { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; white-space: nowrap; color: #fff; font-size: 11px; font-weight: 700; text-decoration: none; }
+  .site-header .show-minicart { flex-shrink: 0; width: 38px; height: 38px; display: flex !important; visibility: visible !important; align-items: center; justify-content: center; }
+  .top-categories-bar { display: none; }
+  .sushino-mobile-categories { display: block; margin: 0 0 18px; background: #fff; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,.05); }
+  .sushino-mobile-categories summary { cursor: pointer; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 700; list-style: none; }
+  .sushino-mobile-categories summary::-webkit-details-marker { display: none; }
+  .sushino-mobile-categories ul { list-style: none; margin: 0; padding: 0 12px 12px; max-height: 45vh; overflow-y: auto; }
+  .sushino-mobile-categories li a { display: block; padding: 10px 6px; color: #222; text-decoration: none; font-size: 13px; }
+  .product-grid-card .product-body-content .btn-add-to-cart { width: fit-content; max-width: 100%; min-height: 40px; padding: 8px 12px; border-radius: 10px; font-size: 11px; }
+  .floating-cart-pill { bottom: 14px; right: 14px; min-height: 44px; padding: 9px 14px; gap: 7px; font-size: 12px; }
+}
+
+/* La sezione Shopify resta aderente al bordo superiore durante lo scorrimento. */
+#shopify-section-header { position: sticky; top: 0; z-index: 1000; }
+.site-header { position: static !important; width: 100%; height: auto !important; margin: 0 !important; padding: 12px 16px !important; }
+.site-header .container { min-height: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+.site-header .site-branding .custom-logo { max-width: 240px; height: auto; }
+.site-content { margin-top: 0 !important; }
+.site-header .show-minicart::after { content: none !important; }

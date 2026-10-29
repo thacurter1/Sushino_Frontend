@@ -8,9 +8,11 @@
 
     <nav id="site-navigation" class="main-navigation" style="display: flex; gap: 20px;">
       <a href="{{ routes.root_url }}" style="color: #fff; text-decoration: none; font-weight: 700;">Menu</a>
-      <a href="#cat33" style="color: #fff; text-decoration: none;">Tropical Box</a>
-      <a href="tel:{{ section.settings.phone_number }}" style="color: #fab900; text-decoration: none; font-weight: 700;">📞 {{ section.settings.phone_number }}</a>
+      <a href="{{ routes.root_url }}#cat-{{ collections['tropical-sushi-box'].id }}" style="color: #fff; text-decoration: none;">Tropical Box</a>
+      <a class="sushino-header-phone" href="tel:{{ section.settings.phone_number | remove: ' ' | escape }}">📞 <span>{{ section.settings.phone_number | escape }}</span></a>
     </nav>
+
+    <a class="sushino-mobile-phone" href="tel:{{ section.settings.phone_number | remove: ' ' | escape }}" aria-label="Chiama {{ section.settings.phone_number | escape }}">📞 <span>{{ section.settings.phone_number | escape }}</span></a>
 
     <button type="button" class="show-minicart" id="open-cart-icon" data-open-cart aria-label="Apri il carrello" style="cursor: pointer; position: relative; border: 0; background: transparent; color: inherit;">
       <span style="font-size: 22px;">🛒</span>

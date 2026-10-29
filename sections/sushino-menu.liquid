@@ -16,12 +16,28 @@
   </div>
 
   {% paginate collections by 50 %}
+  <details class="sushino-mobile-categories">
+    <summary>Scegli una categoria <span aria-hidden="true">⌄</span></summary>
+    <ul>
+      {% for collection in collections %}
+        {% if collection.products_count > 0 %}
+          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </details>
+  <script>
+    document.currentScript.previousElementSibling.addEventListener('click', function(event) {
+      if (event.target.closest('a')) this.removeAttribute('open');
+    });
+  </script>
+
   <!-- BARRA CATEGORIE ORIZZONTALE -->
   <nav class="top-categories-bar" aria-label="Menu categorie">
     <ul class="top-categories-list">
       {% for collection in collections %}
         {% if collection.products_count > 0 %}
-          <li><a href="#cat-{{ collection.id }}">{{ collection.title }}</a></li>
+          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -35,7 +51,7 @@
       {% if collection.products_count > 0 %}
         <div class="category-products" id="cat-{{ collection.id }}" style="margin-bottom: 40px;">
           <div class="category-title" style="margin-bottom: 20px; border-bottom: 2px solid #17a5b9; padding-bottom: 8px;">
-            <h3 style="margin: 0; font-size: 18px; color: #17a5b9;">{{ collection.title }}</h3>
+            <h3 style="margin: 0; font-size: 18px; color: #17a5b9;">{{ collection.title | escape }}</h3>
             {% if collection.description != blank %}
               <p style="margin: 6px 0 0 0; font-size: 12px; color: #666;">{{ collection.description }}</p>
             {% endif %}
