@@ -1,0 +1,457 @@
+{% if product.featured_image %}
+  <img loading="lazy" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}">
+{% else %}
+  {% assign sushino_photo_key = product.title | downcase | strip %}
+  {% assign sushino_photo_asset = '' %}
+  {% case sushino_photo_key %}
+    {% when "apple-maki" %}
+      {% assign sushino_photo_asset = 'sushino-foto-022.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "apple-maki (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-022.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "birra lattina hygge doppelbock- mudita" %}
+      {% assign sushino_photo_asset = 'sushino-foto-049.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "birra lattina kaamos bock - mudita" %}
+      {% assign sushino_photo_asset = 'sushino-foto-051.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "birra lattina meraki american ipa- mudita" %}
+      {% assign sushino_photo_asset = 'sushino-foto-052.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "birra lattina tarab hazy ipa - mudita" %}
+      {% assign sushino_photo_asset = 'sushino-foto-050.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "birra lattina wanderlust session ipa - mudita" %}
+      {% assign sushino_photo_asset = 'sushino-foto-053.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "box vegana" %}
+      {% assign sushino_photo_asset = 'sushino-foto-006.jpg' %}
+      {% assign sushino_photo_width = 800 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "coca-cola vetro 33 cl" %}
+      {% assign sushino_photo_asset = 'sushino-foto-055.jpg' %}
+      {% assign sushino_photo_width = 500 %}
+      {% assign sushino_photo_height = 500 %}
+    {% when "coca-cola zero vetro 33 cl" %}
+      {% assign sushino_photo_asset = 'sushino-foto-054.jpg' %}
+      {% assign sushino_photo_width = 600 %}
+      {% assign sushino_photo_height = 600 %}
+    {% when "crocchette di pesce misto" %}
+      {% assign sushino_photo_asset = 'sushino-foto-010.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "edamame" %}
+      {% assign sushino_photo_asset = 'sushino-foto-011.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "fanta vetro 33 cl" %}
+      {% assign sushino_photo_asset = 'sushino-foto-056.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "gunkan di branzino (2 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-043.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan di branzino (2 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-043.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan di salmone (2 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-044.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan di salmone (2 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-044.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan green (4 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-037.jpg' %}
+      {% assign sushino_photo_width = 1024 %}
+      {% assign sushino_photo_height = 1024 %}
+    {% when "gunkan green (4 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-037.jpg' %}
+      {% assign sushino_photo_width = 1024 %}
+      {% assign sushino_photo_height = 1024 %}
+    {% when "gunkan nachos (2 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-040.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "gunkan nachos (2 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-040.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "gunkan tempura (2 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-041.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan tempura (2 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-041.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan tonno (2 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-042.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gunkan tonno (2 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-042.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gyoza di gambero (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-012.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gyoza di gambero (3 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-012.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gyoza di pollo e verdure (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-012.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gyoza di pollo e verdure (3 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-012.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gyoza vegetariani (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-012.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "gyoza vegetariani (3 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-012.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "hosomaki salmone (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-045.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "hosomaki salmone (8 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-045.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "hosomaki tonno (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-046.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "hosomaki tonno (8 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-046.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "hot salmon roll" %}
+      {% assign sushino_photo_asset = 'sushino-foto-047.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "hot salmon roll (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-047.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "kiuri-maki (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-038.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "kiuri-maki (8 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-038.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri branzino" %}
+      {% assign sushino_photo_asset = 'sushino-foto-015.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri branzino (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-015.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri salmon sealed" %}
+      {% assign sushino_photo_asset = 'sushino-foto-017.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri salmon sealed (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-017.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri salmone" %}
+      {% assign sushino_photo_asset = 'sushino-foto-018.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri salmone (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-018.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri tonno" %}
+      {% assign sushino_photo_asset = 'sushino-foto-019.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri tonno (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-019.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri tonno guacamole" %}
+      {% assign sushino_photo_asset = 'sushino-foto-016.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nigiri tonno guacamole (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-016.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "nuggets di salmone fritto" %}
+      {% assign sushino_photo_asset = 'sushino-foto-009.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "olio's uramaki" %}
+      {% assign sushino_photo_asset = 'sushino-foto-034.jpg' %}
+      {% assign sushino_photo_width = 1080 %}
+      {% assign sushino_photo_height = 1080 %}
+    {% when "olio's uramaki (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-034.jpg' %}
+      {% assign sushino_photo_width = 1080 %}
+      {% assign sushino_photo_height = 1080 %}
+    {% when "pastelaria roll" %}
+      {% assign sushino_photo_asset = 'sushino-foto-048.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "pastelaria roll (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-048.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "sashimi di salmone (5 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-013.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "sashimi di salmone (5 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-013.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "sashimi di tonno (5 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-014.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "sashimi di tonno (5 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-014.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "small tropical sushi box 3 piatti" %}
+      {% assign sushino_photo_asset = 'sushino-foto-007.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "tempura di salmone" %}
+      {% assign sushino_photo_asset = 'sushino-foto-023.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "tempura di salmone (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-023.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "tropical lunch box" %}
+      {% assign sushino_photo_asset = 'sushino-foto-005.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "tropical sushi box 5 piatti" %}
+      {% assign sushino_photo_asset = 'sushino-foto-008.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "tropical sushi box 8 piatti" %}
+      {% assign sushino_photo_asset = 'sushino-foto-008.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki california" %}
+      {% assign sushino_photo_asset = 'sushino-foto-024.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki california (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-024.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki ebi pistacchio" %}
+      {% assign sushino_photo_asset = 'sushino-foto-031.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "uramaki ebi pistacchio  (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-031.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "uramaki ebi tempura" %}
+      {% assign sushino_photo_asset = 'sushino-foto-032.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki ebi tempura (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-032.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki edo" %}
+      {% assign sushino_photo_asset = 'sushino-foto-028.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki edo (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-028.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki horonigai" %}
+      {% assign sushino_photo_asset = 'sushino-foto-033.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki horonigai (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-033.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki kreb" %}
+      {% assign sushino_photo_asset = 'sushino-foto-036.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki kreb (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-036.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki maguro" %}
+      {% assign sushino_photo_asset = 'sushino-foto-029.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki maguro (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-029.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki nikei" %}
+      {% assign sushino_photo_asset = 'sushino-foto-035.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki nikei (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-035.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki philadelphia" %}
+      {% assign sushino_photo_asset = 'sushino-foto-001.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki philadelphia (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-001.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki salmone spicy" %}
+      {% assign sushino_photo_asset = 'sushino-foto-020.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "uramaki salmone spicy  (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-020.jpg' %}
+      {% assign sushino_photo_width = 1000 %}
+      {% assign sushino_photo_height = 1000 %}
+    {% when "uramaki tempura" %}
+      {% assign sushino_photo_asset = 'sushino-foto-002.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tempura (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-002.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tempura spezie" %}
+      {% assign sushino_photo_asset = 'sushino-foto-025.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tempura spezie (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-025.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tonno" %}
+      {% assign sushino_photo_asset = 'sushino-foto-030.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tonno (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-030.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tonno piccante" %}
+      {% assign sushino_photo_asset = 'sushino-foto-004.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tonno piccante (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-004.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tonno pistacchio" %}
+      {% assign sushino_photo_asset = 'sushino-foto-027.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki tonno pistacchio  (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-027.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki waka" %}
+      {% assign sushino_photo_asset = 'sushino-foto-021.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki waka (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-021.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki white" %}
+      {% assign sushino_photo_asset = 'sushino-foto-026.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "uramaki white (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-026.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "veggie crock (8 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-039.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "veggie crock (8 pz)" %}
+      {% assign sushino_photo_asset = 'sushino-foto-039.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 1200 %}
+    {% when "birra mudita hygge doppelbock 33 cl" %}
+      {% assign sushino_photo_asset = 'sushino-foto-049.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "birra mudita tarab hazy ipa 33 cl" %}
+      {% assign sushino_photo_asset = 'sushino-foto-050.jpg' %}
+      {% assign sushino_photo_width = 1200 %}
+      {% assign sushino_photo_height = 800 %}
+    {% when "nigiri gambero" %}
+      {% assign sushino_photo_asset = 'sushino-ai-nigiri-gambero.webp' %}
+      {% assign sushino_photo_width = 1254 %}
+      {% assign sushino_photo_height = 1254 %}
+    {% when "nigiri gambero (3 pezzi)" %}
+      {% assign sushino_photo_asset = 'sushino-ai-nigiri-gambero.webp' %}
+      {% assign sushino_photo_width = 1254 %}
+      {% assign sushino_photo_height = 1254 %}
+    {% when "uramaki manganelli" %}
+      {% assign sushino_photo_asset = 'sushino-ai-uramaki-manganelli.webp' %}
+      {% assign sushino_photo_width = 1254 %}
+      {% assign sushino_photo_height = 1254 %}
+    {% when "gambero kataifi" %}
+      {% assign sushino_photo_asset = 'sushino-ai-gambero-kataifi.webp' %}
+      {% assign sushino_photo_width = 1254 %}
+      {% assign sushino_photo_height = 1254 %}
+    {% when "tropical #veggie lunch" %}
+      {% assign sushino_photo_asset = 'sushino-ai-tropical-veggie.webp' %}
+      {% assign sushino_photo_width = 1254 %}
+      {% assign sushino_photo_height = 1254 %}
+      {% when "tropical #combo lunch" %}
+      {% assign sushino_photo_asset = 'sushino-ai-tropical-combo.webp' %}
+      {% assign sushino_photo_width = 1254 %}
+      {% assign sushino_photo_height = 1254 %}
+      {% when "gift card 3 piatti" %}
+      {% assign sushino_photo_asset = 'sushino-gift-card-3.svg' %}
+      {% assign sushino_photo_width = 800 %}
+      {% assign sushino_photo_height = 600 %}
+    {% when "gift card 5 piatti" %}
+      {% assign sushino_photo_asset = 'sushino-gift-card-5.svg' %}
+      {% assign sushino_photo_width = 800 %}
+      {% assign sushino_photo_height = 600 %}
+    {% when "gift card 10 piatti" %}
+      {% assign sushino_photo_asset = 'sushino-gift-card-10.svg' %}
+      {% assign sushino_photo_width = 800 %}
+      {% assign sushino_photo_height = 600 %}
+  {% endcase %}
+  {% if sushino_photo_asset != blank %}
+    <img loading="lazy" width="{{ sushino_photo_width }}" height="{{ sushino_photo_height }}" src="{{ sushino_photo_asset | asset_url }}" alt="{{ product.title | escape }}">
+  {% else %}
+    <img loading="lazy" width="200" height="35" src="{{ 'logo-w.png' | asset_url }}" alt="Foto del prodotto non disponibile" style="object-fit: contain; padding: 30px; background: #17a5b9;">
+  {% endif %}
+{% endif %}

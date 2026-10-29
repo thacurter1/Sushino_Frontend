@@ -1,0 +1,35 @@
+<div class="sushino-collection" style="margin: 20px 0;">
+  <h1>{{ collection.title | escape }}</h1>
+  {% if collection.description != blank %}<div>{{ collection.description }}</div>{% endif %}
+  {% paginate collection.products by 50 %}
+    <div class="products-grid-layout">
+      {% for product in collection.products limit: 50 %}
+        {% assign slots = 0 %}
+        {% if product.tags contains 'box-3' %}{% assign slots = 3 %}
+        {% elsif product.tags contains 'box-5' %}{% assign slots = 5 %}
+        {% elsif product.tags contains 'box-8' %}{% assign slots = 8 %}
+        {% elsif product.tags contains 'box-lunch' %}{% assign slots = 1 %}{% endif %}
+        {% assign active_variant = product.first_available_variant %}
+        <article class="product-grid-card">
+          <div class="product-thumb-top">{% render 'sushino-product-image', product: product %}</div>
+          <div class="product-body-content">
+            <div><div class="product-name">{{ product.title | escape }}</div><div class="product-price-badge">{% if active_variant %}{{ active_variant.price | money }}{% else %}{{ product.price | money }}{% endif %}</div><div class="product-description">{{ product.description | strip_html | truncate: 120 }}</div></div>
+            {% if active_variant %}
+              {% if slots > 0 %}
+                <button type="button" class="btn-add-to-cart js-configure-box" data-variant-id="{{ active_variant.id }}" data-product-title="{{ product.title | escape }}" data-slots="{{ slots }}" data-price-cents="{{ active_variant.price }}" data-is-lunch="{% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %}">Configura e Aggiungi</button>
+              {% else %}<button type="button" class="btn-add-to-cart js-add-product" data-variant-id="{{ active_variant.id }}">Aggiungi al Carrello</button>{% endif %}
+            {% else %}<button type="button" class="btn-add-to-cart" disabled>Non disponibile</button>{% endif %}
+          </div>
+        </article>
+      {% else %}<p>Nessun prodotto disponibile in questa collezione.</p>{% endfor %}
+    </div>
+    {{ paginate | default_pagination }}
+  {% endpaginate %}
+</div>
+
+{% schema %}
+{
+  "name": "Sushino Collection",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,376 @@
+<!-- Modale Box Configurator per Shopify con Gestione Extra Reali a Pagamento (F1) -->
+<div id="shopify-box-modal" class="qd-modal-overlay">
+  <div class="qd-modal">
+    <div class="qd-modal-header">
+      <h3 id="qd-modal-title">Componi Tropical Box</h3>
+      <button type="button" class="qd-modal-close" id="qd-modal-close-btn">&times;</button>
+    </div>
+    <div class="qd-modal-body">
+      <div>
+        <span class="slot-counter" id="qd-slot-counter">0 / 3 piatti scelti</span>
+        <p style="font-size: 12px; color: #666; margin: 0 0 10px 0;">
+          Tutti i piatti scelti qui sotto sono inclusi nel prezzo fisso della box.
+        </p>
+      </div>
+
+      <!-- Piatti selezionabili -->
+      <div id="qd-plate-list"></div>
+
+      <!-- Extra (Bevande, Salse, Bacchette) -->
+      <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi da bere?</h4>
+        {% assign qd_coca = all_products['coca-cola-vetro-33cl'] %}
+        {% assign qd_coca_zero = all_products['coca-cola-zero-vetro-33cl'] %}
+        {% assign qd_fanta = all_products['fanta-vetro-33cl'] %}
+        {% assign qd_wine = all_products['chardonnay-batti-becco'] %}
+        <select id="qd-opt-drink" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+          <option value="none" data-unit-price="0">Nessuna bevanda</option>
+          {% if qd_coca and qd_coca.first_available_variant %}<option value="coca" data-product-handle="{{ qd_coca.handle }}" data-variant-id="{{ qd_coca.first_available_variant.id }}" data-unit-price="{{ qd_coca.first_available_variant.price }}" data-quantity="1">Coca-Cola vetro 33cl ({{ qd_coca.first_available_variant.price | money }})</option>{% endif %}
+          {% if qd_coca_zero and qd_coca_zero.first_available_variant %}<option value="coca-zero" data-product-handle="{{ qd_coca_zero.handle }}" data-variant-id="{{ qd_coca_zero.first_available_variant.id }}" data-unit-price="{{ qd_coca_zero.first_available_variant.price }}" data-quantity="1">Coca-Cola Zero vetro 33cl ({{ qd_coca_zero.first_available_variant.price | money }})</option>{% endif %}
+          {% if qd_fanta and qd_fanta.first_available_variant %}<option value="fanta" data-product-handle="{{ qd_fanta.handle }}" data-variant-id="{{ qd_fanta.first_available_variant.id }}" data-unit-price="{{ qd_fanta.first_available_variant.price }}" data-quantity="1">Fanta Vetro 33cl ({{ qd_fanta.first_available_variant.price | money }})</option>{% endif %}
+          {% if qd_wine and qd_wine.first_available_variant %}<option value="batti-becco" data-product-handle="{{ qd_wine.handle }}" data-variant-id="{{ qd_wine.first_available_variant.id }}" data-unit-price="{{ qd_wine.first_available_variant.price }}" data-quantity="1">Chardonnay Batti Becco Bianco 0,75l ({{ qd_wine.first_available_variant.price | money }})</option>{% endif %}
+        </select>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi la salsa soia?</h4>
+        {% assign qd_soia = all_products['salsa-soia'] %}
+        <select id="qd-opt-soia" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+          <option value="0" data-unit-price="0">Nessuna</option>
+          {% if qd_soia and qd_soia.first_available_variant %}
+            {% assign qd_soia_variant = qd_soia.first_available_variant %}
+            <option value="1" data-product-handle="{{ qd_soia.handle }}" data-variant-id="{{ qd_soia_variant.id }}" data-unit-price="{{ qd_soia_variant.price }}" data-quantity="1">Salsa Soia ({{ qd_soia_variant.price | money }})</option>
+            <option value="2" data-product-handle="{{ qd_soia.handle }}" data-variant-id="{{ qd_soia_variant.id }}" data-unit-price="{{ qd_soia_variant.price }}" data-quantity="2">Salsa Soia x2 ({{ qd_soia_variant.price | times: 2 | money }})</option>
+            <option value="3" data-product-handle="{{ qd_soia.handle }}" data-variant-id="{{ qd_soia_variant.id }}" data-unit-price="{{ qd_soia_variant.price }}" data-quantity="3">Salsa Soia x3 ({{ qd_soia_variant.price | times: 3 | money }})</option>
+            <option value="4" data-product-handle="{{ qd_soia.handle }}" data-variant-id="{{ qd_soia_variant.id }}" data-unit-price="{{ qd_soia_variant.price }}" data-quantity="4">Salsa Soia x4 ({{ qd_soia_variant.price | times: 4 | money }})</option>
+          {% endif %}
+        </select>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi la salsa Teriyaki?</h4>
+        {% assign qd_teriyaki = all_products['salsa-teriyaki'] %}
+        <select id="qd-opt-teriyaki" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+          <option value="0" data-unit-price="0">Nessuna</option>
+          {% if qd_teriyaki and qd_teriyaki.first_available_variant %}<option value="1" data-product-handle="{{ qd_teriyaki.handle }}" data-variant-id="{{ qd_teriyaki.first_available_variant.id }}" data-unit-price="{{ qd_teriyaki.first_available_variant.price }}" data-quantity="1">Salsa Teriyaki ({{ qd_teriyaki.first_available_variant.price | money }})</option>{% endif %}
+        </select>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi la salsa Agrodolce?</h4>
+        {% assign qd_agrodolce = all_products['salsa-agrodolce'] %}
+        <select id="qd-opt-agrodolce" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+          <option value="0" data-unit-price="0">Nessuna</option>
+          {% if qd_agrodolce and qd_agrodolce.first_available_variant %}<option value="1" data-product-handle="{{ qd_agrodolce.handle }}" data-variant-id="{{ qd_agrodolce.first_available_variant.id }}" data-unit-price="{{ qd_agrodolce.first_available_variant.price }}" data-quantity="1">Salsa Agrodolce ({{ qd_agrodolce.first_available_variant.price | money }})</option>{% endif %}
+        </select>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Quante bacchette ti servono? *</h4>
+        <select id="qd-opt-chopsticks" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+          <option value="0">Nessuna</option>
+          <option value="1" selected>1 paio</option>
+          <option value="2">2 paia</option>
+          <option value="3">3 paia</option>
+          <option value="4">4 paia</option>
+          <option value="5">5 paia</option>
+        </select>
+      </div>
+
+      {% assign qd_gluten_free = all_products['supplemento-senza-glutine'] %}
+      {% if qd_gluten_free and qd_gluten_free.first_available_variant %}
+        <div style="margin-top: 15px;">
+          <label style="font-size: 12px; font-weight: bold; cursor: pointer;">
+            <input type="checkbox" id="qd-opt-celiaco" data-product-handle="{{ qd_gluten_free.handle }}" data-variant-id="{{ qd_gluten_free.first_available_variant.id }}" data-unit-price="{{ qd_gluten_free.first_available_variant.price }}"> Sei Celiaco? Soia Gluten Free e piatti separati ({{ qd_gluten_free.first_available_variant.price | money }})
+          </label>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="qd-modal-footer">
+      <div>
+        <span style="font-size: 11px; color: #888; display: block;">Totale box ed extra:</span>
+        <span id="qd-modal-total" style="font-size: 18px; font-weight: bold; color: #17a5b9;">0,00 €</span>
+      </div>
+      <button type="button" class="btn-add-to-cart" id="qd-modal-submit" disabled>
+        Seleziona tutti i piatti
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentBox = {
+    variantId: null,
+    name: '',
+    basePriceCents: 0,
+    slotsRequired: 0,
+    selectedPlates: [],
+    drinkCents: 0,
+    soiaCents: 0,
+    teriyakiCents: 0,
+    agrodolceCents: 0,
+    celiacoCents: 0,
+    chopsticks: 1,
+    isLunch: false
+  };
+
+  const LUNCH_CHOICES = [
+    "Uramaki Philadelphia 8 pz",
+    "Uramaki Tempura 8 pz",
+    "Olio's Uramaki 8 pz",
+    "Uramaki Tonno Piccante 8 pz"
+  ];
+
+  const EVENING_CHOICES = [
+    "Uramaki Salmone spicy (8 pezzi)",
+    "Uramaki Philadelphia (8 pezzi)",
+    "Tempura di Salmone (8 pezzi)",
+    "Uramaki California (8 pezzi)",
+    "Uramaki White (8 pezzi)",
+    "Uramaki Tonno Pistacchio (8 pezzi)",
+    "Uramaki Tonno Piccante (8 pezzi)",
+    "Uramaki Ebi Tempura (8 pezzi)",
+    "Olio's Uramaki (8 pezzi)",
+    "Hot Salmon Roll (8 pezzi)",
+    "Nigiri Salmone (3 pezzi)",
+    "Nigiri Branzino (3 pezzi)"
+  ];
+
+  function openBoxModalFor(variantId, name, slots, priceCents, isLunch) {
+    currentBox = {
+      variantId: variantId,
+      name: name,
+      basePriceCents: priceCents,
+      slotsRequired: slots,
+      selectedPlates: [],
+      drinkCents: 0,
+      soiaCents: 0,
+      teriyakiCents: 0,
+      agrodolceCents: 0,
+      celiacoCents: 0,
+      chopsticks: 1,
+      isLunch: isLunch
+    };
+
+    document.getElementById('qd-modal-title').textContent = name;
+    document.getElementById('qd-opt-drink').selectedIndex = 0;
+    document.getElementById('qd-opt-soia').selectedIndex = 0;
+    document.getElementById('qd-opt-teriyaki').selectedIndex = 0;
+    document.getElementById('qd-opt-agrodolce').selectedIndex = 0;
+    const glutenCheckbox = document.getElementById('qd-opt-celiaco');
+    if (glutenCheckbox) glutenCheckbox.checked = false;
+    document.getElementById('qd-opt-chopsticks').value = '1';
+
+    renderPlatesList();
+    updatePlateCounts(); // F5: Reset esplicito contatori piatti
+    updateBoxTotal();
+    document.getElementById('shopify-box-modal').style.display = 'flex';
+  }
+
+  function closeBoxModal() {
+    document.getElementById('shopify-box-modal').style.display = 'none';
+  }
+
+  const closeBtn = document.getElementById('qd-modal-close-btn');
+  if (closeBtn) closeBtn.addEventListener('click', closeBoxModal);
+
+  const modalOverlay = document.getElementById('shopify-box-modal');
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeBoxModal();
+    });
+  }
+
+  // F4: Creazione sicura tramite DOM e addEventListener
+  function renderPlatesList() {
+    const container = document.getElementById('qd-plate-list');
+    container.innerHTML = '';
+    const pool = currentBox.isLunch ? LUNCH_CHOICES : EVENING_CHOICES;
+
+    pool.forEach(plate => {
+      const row = document.createElement('div');
+      row.className = 'slot-plate-row';
+
+      const label = document.createElement('span');
+      label.textContent = plate;
+
+      const ctrlDiv = document.createElement('div');
+
+      const btnSub = document.createElement('button');
+      btnSub.type = 'button';
+      btnSub.className = 'slot-ctrl-btn';
+      btnSub.textContent = '-';
+      btnSub.addEventListener('click', () => modifyPlateCount(plate, -1));
+
+      const countSpan = document.createElement('span');
+      countSpan.className = 'plate-counter-span';
+      countSpan.dataset.plate = plate;
+      countSpan.style.display = 'inline-block';
+      countSpan.style.width = '24px';
+      countSpan.style.textAlign = 'center';
+      countSpan.style.fontWeight = 'bold';
+      countSpan.textContent = '0';
+
+      const btnAdd = document.createElement('button');
+      btnAdd.type = 'button';
+      btnAdd.className = 'slot-ctrl-btn';
+      btnAdd.textContent = '+';
+      btnAdd.addEventListener('click', () => modifyPlateCount(plate, 1));
+
+      ctrlDiv.appendChild(btnSub);
+      ctrlDiv.appendChild(countSpan);
+      ctrlDiv.appendChild(btnAdd);
+
+      row.appendChild(label);
+      row.appendChild(ctrlDiv);
+      container.appendChild(row);
+    });
+  }
+
+  function modifyPlateCount(plate, delta) {
+    if (delta > 0 && currentBox.selectedPlates.length < currentBox.slotsRequired) {
+      currentBox.selectedPlates.push(plate);
+    } else if (delta < 0) {
+      const idx = currentBox.selectedPlates.lastIndexOf(plate);
+      if (idx !== -1) currentBox.selectedPlates.splice(idx, 1);
+    }
+    updatePlateCounts();
+    updateBoxTotal();
+  }
+
+  function updatePlateCounts() {
+    const counts = {};
+    currentBox.selectedPlates.forEach(p => counts[p] = (counts[p] || 0) + 1);
+
+    document.querySelectorAll('.plate-counter-span').forEach(el => {
+      const p = el.dataset.plate;
+      el.textContent = counts[p] || 0;
+    });
+
+    const badge = document.getElementById('qd-slot-counter');
+    const curr = currentBox.selectedPlates.length;
+    badge.textContent = `${curr} / ${currentBox.slotsRequired} piatti scelti`;
+    badge.style.color = (curr === currentBox.slotsRequired) ? '#15b374' : '#17a5b9';
+  }
+
+  function selectedOptionTotal(select) {
+    const option = select.selectedOptions[0];
+    const unitPrice = parseInt(option.dataset.unitPrice || '0', 10);
+    const quantity = parseInt(option.dataset.quantity || '1', 10);
+    return unitPrice * quantity;
+  }
+
+  function updateBoxTotal() {
+    const dOpt = document.getElementById('qd-opt-drink');
+    const sOpt = document.getElementById('qd-opt-soia');
+    const tOpt = document.getElementById('qd-opt-teriyaki');
+    const aOpt = document.getElementById('qd-opt-agrodolce');
+    const celiacoInput = document.getElementById('qd-opt-celiaco');
+    const cVal = !!(celiacoInput && celiacoInput.checked);
+
+    currentBox.drinkCents = selectedOptionTotal(dOpt);
+    currentBox.soiaCents = selectedOptionTotal(sOpt);
+    currentBox.teriyakiCents = selectedOptionTotal(tOpt);
+    currentBox.agrodolceCents = selectedOptionTotal(aOpt);
+    currentBox.celiacoCents = cVal ? parseInt(celiacoInput.dataset.unitPrice || '0', 10) : 0;
+    currentBox.chopsticks = parseInt(document.getElementById('qd-opt-chopsticks').value, 10);
+
+    const total = currentBox.basePriceCents + currentBox.drinkCents + currentBox.soiaCents + currentBox.teriyakiCents + currentBox.agrodolceCents + currentBox.celiacoCents;
+    document.getElementById('qd-modal-total').textContent = formatMoney(total);
+
+    const submitBtn = document.getElementById('qd-modal-submit');
+    const missing = currentBox.slotsRequired - currentBox.selectedPlates.length;
+    if (missing === 0) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Aggiungi Box a Shopify';
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.textContent = `Mancano ${missing} piatti`;
+    }
+  }
+
+  // Listener selettori extra
+  ['qd-opt-drink', 'qd-opt-soia', 'qd-opt-teriyaki', 'qd-opt-agrodolce', 'qd-opt-chopsticks'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', updateBoxTotal);
+  });
+  const glutenCheckbox = document.getElementById('qd-opt-celiaco');
+  if (glutenCheckbox) glutenCheckbox.addEventListener('change', updateBoxTotal);
+
+  const submitBtn = document.getElementById('qd-modal-submit');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', addConfiguredBoxToShopify);
+  }
+
+  // F1 & F3: Invio a Shopify con gestione Bundle Multi-Item
+  // La Box viene inviata con la lista piatti nelle properties, e ogni extra a pagamento
+  // viene inviato come riga reale addebitabile collegata tramite _box_ref
+  async function addConfiguredBoxToShopify() {
+    if (currentBox.selectedPlates.length !== currentBox.slotsRequired) {
+      alert(`Seleziona esattamente ${currentBox.slotsRequired} piatti prima di aggiungere la box.`);
+      return;
+    }
+
+    const boxRef = 'box-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+
+    const counts = {};
+    currentBox.selectedPlates.forEach(p => counts[p] = (counts[p] || 0) + 1);
+    const platesText = Object.entries(counts).map(([k, v]) => `${v}x ${k}`).join(', ');
+
+    const drinkOpt = document.getElementById('qd-opt-drink').selectedOptions[0];
+    const soiaOpt = document.getElementById('qd-opt-soia').selectedOptions[0];
+    const teriyakiOpt = document.getElementById('qd-opt-teriyaki').selectedOptions[0];
+    const agrodolceOpt = document.getElementById('qd-opt-agrodolce').selectedOptions[0];
+    const celiacoChecked = !!(document.getElementById('qd-opt-celiaco') && document.getElementById('qd-opt-celiaco').checked);
+
+    const mainBoxItem = {
+      id: currentBox.variantId,
+      quantity: 1,
+      properties: {
+        'Piatti scelti': platesText,
+        'Bacchette': currentBox.chopsticks + ' paia',
+        '_box_ref': boxRef
+      }
+    };
+
+    const extraItems = [];
+    const addSelectedExtra = (option, label) => {
+      if (!option || !option.dataset.variantId || option.value === 'none' || option.value === '0') return;
+      const quantity = parseInt(option.dataset.quantity || '1', 10);
+      extraItems.push({
+        id: option.dataset.variantId,
+        quantity,
+        properties: { '_box_ref': boxRef, 'Configurazione': label }
+      });
+      mainBoxItem.properties[label] = option.textContent.trim();
+      const configKey = { 'Bevanda': '_extra_drink', 'Salsa Soia': '_extra_soia', 'Salsa Teriyaki': '_extra_teriyaki', 'Salsa Agrodolce': '_extra_agrodolce' }[label];
+      if (configKey) {
+        mainBoxItem.properties[configKey] = option.dataset.productHandle;
+        mainBoxItem.properties[`${configKey}_quantity`] = String(quantity);
+      }
+    };
+
+    addSelectedExtra(drinkOpt, 'Bevanda');
+    addSelectedExtra(soiaOpt, 'Salsa Soia');
+    addSelectedExtra(teriyakiOpt, 'Salsa Teriyaki');
+    addSelectedExtra(agrodolceOpt, 'Salsa Agrodolce');
+
+    const glutenInput = document.getElementById('qd-opt-celiaco');
+    if (celiacoChecked && glutenInput && glutenInput.dataset.variantId) {
+      extraItems.push({
+        id: glutenInput.dataset.variantId,
+        quantity: 1,
+        properties: { '_box_ref': boxRef, 'Configurazione': 'Supplemento senza glutine' }
+      });
+      mainBoxItem.properties['Senza Glutine'] = 'Sì';
+      mainBoxItem.properties['_extra_gluten_free'] = glutenInput.dataset.productHandle;
+      mainBoxItem.properties['_extra_gluten_free_quantity'] = '1';
+    }
+
+    const itemsToAdd = [mainBoxItem, ...extraItems];
+
+    closeBoxModal();
+    await addMultipleItemsToShopify(itemsToAdd);
+  }
+</script>

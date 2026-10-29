@@ -1,0 +1,206 @@
+<!-- Cassetto Laterale Carrello Connesso a Shopify Cart API (/cart.js) -->
+<div class="cart-drawer-backdrop" id="shopify-cart-backdrop" data-cart-backdrop>
+  <div class="cart-drawer-panel">
+    <div class="cart-drawer-header">
+      <h3>Il tuo Carrello</h3>
+      <button type="button" class="cart-drawer-close" data-close-cart aria-label="Chiudi il carrello">&times;</button>
+    </div>
+    <div class="cart-drawer-body" id="shopify-cart-items-container">
+      <p id="shopify-cart-empty-msg" style="color: #666; font-size: 13px;">Caricamento carrello...</p>
+    </div>
+    <div class="cart-drawer-footer" id="shopify-cart-footer" style="display: none;">
+      <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; font-size: 16px;">
+        <span>Totale da Pagare:</span>
+        <span id="shopify-cart-total-display" style="color: #17a5b9;">0,00 €</span>
+      </div>
+      <!-- TASTO DIRETTO AL CHECKOUT SHOPIFY (STILE SLAM JAM) -->
+      <a href="{{ routes.root_url }}checkout" class="btn-add-to-cart" style="display: block; text-decoration: none; padding: 14px; text-align: center; box-sizing: border-box;">
+        Procedi al Checkout Shopify ➔
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Cart Button -->
+<button type="button" class="floating-cart-pill" id="shopify-floating-cart-btn" data-open-cart aria-label="Apri il carrello" style="border: 0; font-family: inherit;">
+  <span>🛒 Carrello</span>
+  <span class="floating-cart-badge" id="shopify-floating-count">{{ cart.item_count }}</span>
+  <span id="shopify-floating-total" style="margin-left: 4px;">{{ cart.total_price | money }}</span>
+</button>
+
+<script>
+  const SHOPIFY_ROOT_URL = {{ routes.root_url | json }};
+  const shopifyEndpoint = (path) => `${SHOPIFY_ROOT_URL}${path}`;
+
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('[data-open-cart]')) {
+      openShopifyCartDrawer();
+      return;
+    }
+    if (event.target.closest('[data-close-cart]') || event.target === document.getElementById('shopify-cart-backdrop')) {
+      closeShopifyCartDrawer();
+      return;
+    }
+    const boxButton = event.target.closest('.js-configure-box');
+    if (boxButton) {
+      openBoxModalFor(boxButton.dataset.variantId, boxButton.dataset.productTitle, parseInt(boxButton.dataset.slots, 10), parseInt(boxButton.dataset.priceCents, 10), boxButton.dataset.isLunch === 'true');
+      return;
+    }
+    const productButton = event.target.closest('.js-add-product');
+    if (productButton) addProductToShopify(productButton.dataset.variantId, 1);
+  });
+
+  function formatMoney(cents) {
+    return (cents / 100).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
+  }
+
+  function openShopifyCartDrawer() {
+    document.getElementById('shopify-cart-backdrop').style.display = 'flex';
+    fetchShopifyCart();
+  }
+
+  function closeShopifyCartDrawer() {
+    document.getElementById('shopify-cart-backdrop').style.display = 'none';
+  }
+
+  // Chiusura con tasto Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeShopifyCartDrawer();
+  });
+
+  // Leggi carrello reale da Shopify API
+  async function fetchShopifyCart() {
+    try {
+      const res = await fetch(shopifyEndpoint('cart.js'));
+      if (!res.ok) throw new Error("Errore durante il caricamento del carrello");
+      const cart = await res.json();
+      renderShopifyCart(cart);
+    } catch (err) {
+      console.error("Errore fetch carrello Shopify:", err);
+    }
+  }
+
+  // F7: Render del carrello con textContent (prevenzione DOM XSS e caratteri speciali)
+  // F9: Rimozione basata su item.key stabile anziché indice posizionale
+  function renderShopifyCart(cart) {
+    const container = document.getElementById('shopify-cart-items-container');
+    const footer = document.getElementById('shopify-cart-footer');
+    const totalEl = document.getElementById('shopify-cart-total-display');
+    const badge = document.getElementById('cart-badge-count');
+    const floatCount = document.getElementById('shopify-floating-count');
+    const floatTotal = document.getElementById('shopify-floating-total');
+
+    badge.textContent = cart.item_count;
+    floatCount.textContent = cart.item_count;
+    floatTotal.textContent = formatMoney(cart.total_price);
+
+    if (cart.items.length === 0) {
+      container.innerHTML = '<p style="color: #666; font-size: 13px;">Nessun prodotto nel carrello.</p>';
+      footer.style.display = 'none';
+      return;
+    }
+
+    footer.style.display = 'block';
+    totalEl.textContent = formatMoney(cart.total_price);
+    container.innerHTML = '';
+
+    cart.items.forEach((item) => {
+      const itemRow = document.createElement('div');
+      itemRow.className = 'cart-box-item';
+
+      const titleRow = document.createElement('div');
+      titleRow.className = 'cart-box-title';
+
+      const titleSpan = document.createElement('span');
+      titleSpan.textContent = item.product_title;
+
+      const priceSpan = document.createElement('span');
+      priceSpan.style.color = '#17a5b9';
+      priceSpan.textContent = formatMoney(item.final_line_price);
+
+      titleRow.appendChild(titleSpan);
+      titleRow.appendChild(priceSpan);
+      itemRow.appendChild(titleRow);
+
+      if (item.properties) {
+        for (const [key, value] of Object.entries(item.properties)) {
+          if (value && !key.startsWith('_')) {
+            const propDiv = document.createElement('div');
+            propDiv.style.fontSize = '11px';
+            propDiv.style.color = '#666';
+            propDiv.textContent = `• ${key}: ${value}`;
+            itemRow.appendChild(propDiv);
+          }
+        }
+      }
+
+      const actionsDiv = document.createElement('div');
+      actionsDiv.style.marginTop = '6px';
+      actionsDiv.style.display = 'flex';
+      actionsDiv.style.justifyContent = 'space-between';
+      actionsDiv.style.alignItems = 'center';
+
+      const qtySpan = document.createElement('span');
+      qtySpan.style.fontSize = '12px';
+      qtySpan.style.color = '#444';
+      qtySpan.textContent = `Quantità: ${item.quantity}`;
+
+      const removeBtn = document.createElement('span');
+      removeBtn.className = 'cart-remove-btn';
+      removeBtn.textContent = 'Rimuovi';
+      removeBtn.addEventListener('click', () => changeShopifyItemKey(item.key, 0));
+
+      actionsDiv.appendChild(qtySpan);
+      actionsDiv.appendChild(removeBtn);
+      itemRow.appendChild(actionsDiv);
+
+      container.appendChild(itemRow);
+    });
+  }
+
+  // Modifica quantità con key univoca riga (F9)
+  async function changeShopifyItemKey(key, qty) {
+    try {
+      const res = await fetch(shopifyEndpoint('cart/change.js'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: qty })
+      });
+      if (!res.ok) throw new Error("Errore aggiornamento carrello");
+      const cart = await res.json();
+      renderShopifyCart(cart);
+    } catch (e) {
+      console.error(e);
+      alert("Impossibile aggiornare la riga del carrello. Riprova.");
+    }
+  }
+
+  // F8: Aggiunta singolo prodotto
+  async function addProductToShopify(variantId, qty = 1, properties = {}) {
+    await addMultipleItemsToShopify([{
+      id: variantId,
+      quantity: qty,
+      properties: properties
+    }]);
+  }
+
+  // F1: Aggiunta multipla per Box + Extra reali (invia articoli separati a pagamento nell'endpoint nativo /cart/add.js)
+  async function addMultipleItemsToShopify(itemsArray) {
+    try {
+      const res = await fetch(shopifyEndpoint('cart/add.js'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: itemsArray })
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert("Impossibile aggiungere gli articoli: " + (errorData.description || "verificare la disponibilità nel negozio."));
+        return;
+      }
+      openShopifyCartDrawer();
+    } catch (e) {
+      console.error("Errore aggiunta carrello multiplo:", e);
+      alert("Errore di connessione con il negozio Shopify.");
+    }
+  }
+</script>

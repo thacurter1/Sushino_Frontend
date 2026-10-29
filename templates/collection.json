@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "sushino-collection",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
