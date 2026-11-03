@@ -17,7 +17,7 @@
     <summary>Scegli una categoria <span aria-hidden="true">⌄</span></summary>
     <ul>
       {% for collection in collections %}
-        {% if collection.products_count > 0 %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
           <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
         {% endif %}
       {% endfor %}
@@ -33,7 +33,7 @@
   <nav class="top-categories-bar" aria-label="Menu categorie">
     <ul class="top-categories-list">
       {% for collection in collections %}
-        {% if collection.products_count > 0 %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
           <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
         {% endif %}
       {% endfor %}
@@ -45,7 +45,7 @@
     <h2 style="font-size: 20px; margin: 0 0 20px 0; color: #000;">Il Nostro Menu</h2>
 
     {% for collection in collections %}
-      {% if collection.products_count > 0 %}
+      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
         <div class="category-products" id="cat-{{ collection.id }}" style="margin-bottom: 40px;">
           <div class="category-title" style="margin-bottom: 20px; border-bottom: 2px solid #17a5b9; padding-bottom: 8px;">
             <h3 style="margin: 0; font-size: 18px; color: #17a5b9;">{{ collection.title | escape }}</h3>
