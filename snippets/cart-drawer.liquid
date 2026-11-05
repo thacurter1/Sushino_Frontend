@@ -104,6 +104,10 @@
     totalEl.textContent = formatMoney(cart.total_price);
     container.innerHTML = '';
 
+    const boxRefs = new Set(cart.items
+      .filter((item) => item.properties?._box_ref && item.properties['Piatti scelti'])
+      .map((item) => item.properties._box_ref));
+
     cart.items.forEach((item) => {
       const itemRow = document.createElement('div');
       itemRow.className = 'cart-box-item';
@@ -145,33 +149,52 @@
       qtySpan.style.color = '#444';
       qtySpan.textContent = `Quantità: ${item.quantity}`;
 
-      const removeBtn = document.createElement('span');
-      removeBtn.className = 'cart-remove-btn';
-      removeBtn.textContent = 'Rimuovi';
-      removeBtn.addEventListener('click', () => changeShopifyItemKey(item.key, 0));
-
       actionsDiv.appendChild(qtySpan);
-      actionsDiv.appendChild(removeBtn);
+
+      const boxRef = item.properties?._box_ref;
+      const isBox = boxRefs.has(boxRef) && Boolean(item.properties['Piatti scelti']);
+      if (isBox || !boxRefs.has(boxRef)) {
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'cart-remove-btn';
+        removeBtn.textContent = isBox ? 'Rimuovi box ed extra' : 'Rimuovi';
+        removeBtn.addEventListener('click', () => {
+          const keys = isBox
+            ? cart.items.filter((line) => line.properties?._box_ref === boxRef).map((line) => line.key)
+            : [item.key];
+          return removeShopifyItems(keys);
+        });
+        actionsDiv.appendChild(removeBtn);
+      }
+
       itemRow.appendChild(actionsDiv);
 
       container.appendChild(itemRow);
     });
   }
 
-  // Modifica quantità con key univoca riga (F9)
-  async function changeShopifyItemKey(key, qty) {
+  let cartRemovalPending = false;
+
+  async function removeShopifyItems(keys) {
+    if (cartRemovalPending) return;
+    cartRemovalPending = true;
     try {
-      const res = await fetch(shopifyEndpoint('cart/change.js'), {
+      const multiple = keys.length > 1;
+      const body = multiple
+        ? { updates: Object.fromEntries(keys.map((key) => [key, 0])) }
+        : { id: keys[0], quantity: 0 };
+      const res = await fetch(shopifyEndpoint(multiple ? 'cart/update.js' : 'cart/change.js'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: key, quantity: qty })
+        body: JSON.stringify(body)
       });
       if (!res.ok) throw new Error("Errore aggiornamento carrello");
       const cart = await res.json();
       renderShopifyCart(cart);
     } catch (e) {
       console.error(e);
-      alert("Impossibile aggiornare la riga del carrello. Riprova.");
+      alert("Impossibile aggiornare il carrello. Riprova.");
+    } finally {
+      cartRemovalPending = false;
     }
   }
 
