@@ -334,6 +334,7 @@
 
       <main id="MainContent" class="site-content" role="main">
         <div class="container">
+          <p id="sushino-order-hours" role="status" hidden></p>
           {{ content_for_layout }}
         </div>
       </main>
@@ -346,5 +347,107 @@
 
     <!-- Cart Drawer Shopify -->
     {% render 'cart-drawer' %}
+    <style>
+      #sushino-order-hours {
+        margin: 12px 0;
+        padding: 12px 16px;
+        border-radius: 10px;
+        background: #fff4db;
+        color: #533b15;
+      }
+      [data-sushino-hours-disabled] {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+    </style>
+    <script>
+      (() => {
+        const schedule = {
+          Sun: [[750, 900], [1170, 1410]],
+          Mon: [[1170, 1410]],
+          Tue: [[1170, 1410]],
+          Wed: [[1170, 1380]],
+          Thu: [[1170, 1380]],
+          Fri: [[1170, 1380]],
+          Sat: [[1170, 1380]]
+        };
+        const weekdays = Object.keys(schedule);
+        const italianDays = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+        const clock = new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Europe/Rome', weekday: 'short',
+          hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+        });
+
+        function getStatus(date = new Date()) {
+          const parts = Object.fromEntries(clock.formatToParts(date).map(({ type, value }) => [type, value]));
+          const minute = Number(parts.hour) * 60 + Number(parts.minute);
+          const today = weekdays.indexOf(parts.weekday);
+          const open = schedule[parts.weekday].some(([start, end]) => minute >= start && minute < end);
+          if (open) return { open };
+
+          for (let offset = 0; offset <= 7; offset++) {
+            const day = (today + offset) % 7;
+            const next = schedule[weekdays[day]].find(([start]) => offset > 0 || start > minute);
+            if (next) {
+              const [start] = next;
+              const time = Math.floor(start / 60) + ':' + String(start % 60).padStart(2, '0');
+              return { open, next: (offset === 0 ? 'oggi' : italianDays[day]) + ' alle ' + time };
+            }
+          }
+        }
+
+        const actionSelector = '.js-add-product, .js-configure-box, #qd-modal-submit, #shopify-cart-footer a';
+        const notice = document.getElementById('sushino-order-hours');
+        const originalLabels = new WeakMap();
+
+        function refresh(status = getStatus()) {
+          notice.hidden = status.open;
+          const message = status.open ? '' : 'Cucina chiusa. Prossima apertura ' + status.next + '.';
+          if (notice.textContent !== message) notice.textContent = message;
+          document.querySelectorAll(actionSelector).forEach((action) => {
+            if (!status.open && !originalLabels.has(action)) {
+              originalLabels.set(action, {
+                disabled: action.getAttribute('aria-disabled'),
+                label: action.textContent,
+                href: action.getAttribute('href')
+              });
+              action.setAttribute('aria-disabled', 'true');
+              action.setAttribute('data-sushino-hours-disabled', '');
+              if (action.matches('a')) {
+                action.removeAttribute('href');
+                action.textContent = 'Checkout disponibile alla riapertura';
+              }
+            } else if (status.open && originalLabels.has(action)) {
+              const original = originalLabels.get(action);
+              if (original.disabled === null) action.removeAttribute('aria-disabled');
+              else action.setAttribute('aria-disabled', original.disabled);
+              action.removeAttribute('data-sushino-hours-disabled');
+              if (original.href !== null) {
+                action.setAttribute('href', original.href);
+                action.textContent = original.label;
+              }
+              originalLabels.delete(action);
+            }
+          });
+        }
+
+        function checkAction(event) {
+          if (!(event.target instanceof Element) || !event.target.closest(actionSelector)) return;
+          const status = getStatus();
+          refresh(status);
+          if (!status.open) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        }
+
+        document.addEventListener('click', checkAction, true);
+        document.addEventListener('auxclick', checkAction, true);
+        document.addEventListener('visibilitychange', () => refresh());
+        window.addEventListener('pageshow', () => refresh());
+        refresh();
+        window.setInterval(refresh, 1000);
+      })();
+    </script>
   </body>
 </html>
