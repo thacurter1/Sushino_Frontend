@@ -14,12 +14,56 @@
   </div>
 
   {% paginate collections by 50 %}
+  {% assign sushino_box_ids = ',' %}
+  {% assign sushino_lunch_ids = ',' %}
+  {% assign sushino_gift_ids = ',' %}
+  {% for collection in collections %}
+    {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+      {% assign c_title = collection.title | downcase %}
+      {% assign c_handle = collection.handle | downcase %}
+      {% if c_handle contains 'gift' or c_title contains 'gift' %}
+        {% assign sushino_gift_ids = sushino_gift_ids | append: collection.id | append: ',' %}
+      {% elsif c_handle contains 'pranzo' or c_title contains 'pranzo' or c_handle contains 'lunch' or c_title contains 'lunch' %}
+        {% assign sushino_lunch_ids = sushino_lunch_ids | append: collection.id | append: ',' %}
+      {% elsif c_handle contains 'box' or c_title contains 'box' %}
+        {% assign sushino_box_ids = sushino_box_ids | append: collection.id | append: ',' %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
   <details class="sushino-mobile-categories">
     <summary>Scegli una categoria <span aria-hidden="true">⌄</span></summary>
     <ul>
       {% for collection in collections %}
         {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% if sushino_box_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% for collection in collections %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% if sushino_lunch_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% for collection in collections %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% if sushino_gift_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% for collection in collections %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endunless %}
         {% endif %}
       {% endfor %}
     </ul>
@@ -30,107 +74,89 @@
     });
   </script>
 
-  <!-- BARRA CATEGORIE ORIZZONTALE -->
+  <!-- BARRA CATEGORIE ORIZZONTALE (Tropical Box al 1° posto) -->
   <nav class="top-categories-bar" aria-label="Menu categorie">
     <ul class="top-categories-list">
+      {% assign first_pill = true %}
       {% for collection in collections %}
         {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% if sushino_box_ids contains cid_token %}
+            <li{% if first_pill %} class="active"{% endif %}><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+            {% assign first_pill = false %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% for collection in collections %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% if sushino_lunch_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% for collection in collections %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% if sushino_gift_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% for collection in collections %}
+        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+          {% assign cid_token = ',' | append: collection.id | append: ',' %}
+          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token %}
+            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
+          {% endunless %}
         {% endif %}
       {% endfor %}
     </ul>
   </nav>
 
-  <!-- GRIGLIA PRODOTTI DINAMICA DA COLLEZIONI SHOPIFY -->
+  <!-- GRIGLIA PRODOTTI DINAMICA DA COLLEZIONI SHOPIFY (Tropical Box Sezione N.1) -->
   <div class="products card" style="background: #fff; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
     <h2 style="font-size: 20px; margin: 0 0 20px 0; color: #000;">Il Nostro Menu</h2>
 
+    {% assign box_anchor_emitted = false %}
     {% for collection in collections %}
       {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-        <div class="category-products" id="cat-{{ collection.id }}" style="margin-bottom: 40px;">
-          <div class="category-title" style="margin-bottom: 20px; border-bottom: 2px solid #17a5b9; padding-bottom: 8px;">
-            <h3 style="margin: 0; font-size: 18px; color: #17a5b9;">{{ collection.title | escape }}</h3>
-            {% if collection.description != blank %}
-              <p style="margin: 6px 0 0 0; font-size: 12px; color: #666;">{{ collection.description }}</p>
-            {% endif %}
-          </div>
+        {% assign cid_token = ',' | append: collection.id | append: ',' %}
+        {% if sushino_box_ids contains cid_token %}
+          {% assign emit_cat33 = false %}
+          {% unless box_anchor_emitted %}
+            {% assign emit_cat33 = true %}
+            {% assign box_anchor_emitted = true %}
+          {% endunless %}
+          {% render 'sushino-menu-category', collection: collection, is_first_box: emit_cat33 %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-          <div class="products-grid-layout">
-            {% assign is_gift_collection = false %}
-            {% if collection.handle contains 'gift' or collection.title contains 'Gift' %}
-              {% assign is_gift_collection = true %}
-            {% endif %}
-            {% assign gift_card_rendered = false %}
+    {% for collection in collections %}
+      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+        {% assign cid_token = ',' | append: collection.id | append: ',' %}
+        {% if sushino_lunch_ids contains cid_token %}
+          {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-            {% for product in collection.products limit: 50 %}
-              {% assign title_down = product.title | downcase %}
-              {% assign is_gift_product = false %}
-              {% if is_gift_collection or product.tags contains 'gift-card-slider' or product.handle contains 'gift-card' or title_down contains 'gift card' %}
-                {% assign is_gift_product = true %}
-              {% endif %}
+    {% for collection in collections %}
+      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+        {% assign cid_token = ',' | append: collection.id | append: ',' %}
+        {% if sushino_gift_ids contains cid_token %}
+          {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-              {% if is_gift_product %}
-                {% if is_gift_collection %}
-                  {% unless gift_card_rendered %}
-                    {% render 'sushino-gift-card-slider', product: product, collection_products: collection.products %}
-                    {% assign gift_card_rendered = true %}
-                  {% endunless %}
-                {% else %}
-                  {% render 'sushino-gift-card-slider', product: product %}
-                {% endif %}
-              {% else %}
-                {% assign is_box = false %}
-                {% assign slots = 0 %}
-                {% if product.tags contains 'box-3' %}
-                  {% assign is_box = true %}
-                  {% assign slots = 3 %}
-                {% elsif product.tags contains 'box-5' %}
-                  {% assign is_box = true %}
-                  {% assign slots = 5 %}
-                {% elsif product.tags contains 'box-8' %}
-                  {% assign is_box = true %}
-                  {% assign slots = 8 %}
-                {% elsif product.tags contains 'box-lunch' %}
-                  {% assign is_box = true %}
-                  {% assign slots = 1 %}
-                {% endif %}
-
-                {% assign active_variant = product.first_available_variant %}
-                <div class="product-grid-card">
-                  <div class="product-thumb-top">
-                    {% render 'sushino-product-image', product: product %}
-                  </div>
-                  <div class="product-body-content">
-                    <div>
-                      <div class="product-name">{{ product.title | escape }}</div>
-                      <div class="product-price-badge">{% if active_variant %}{{ active_variant.price | money }}{% else %}{{ product.price | money }}{% endif %}</div>
-                      <div class="product-description">
-                        {{ product.description | strip_html | truncate: 120 }}
-                      </div>
-                    </div>
-
-                    {% if active_variant %}
-                      {% if is_box %}
-                        <button type="button" class="btn-add-to-cart js-configure-box" data-variant-id="{{ active_variant.id }}" data-product-title="{{ product.title | escape }}" data-slots="{{ slots }}" data-price-cents="{{ active_variant.price }}" data-is-lunch="{% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %}">
-                          Configura e Aggiungi
-                        </button>
-                      {% else %}
-                        <button type="button" class="btn-add-to-cart js-add-product" data-variant-id="{{ active_variant.id }}">
-                          Aggiungi al Carrello
-                        </button>
-                      {% endif %}
-                    {% else %}
-                      <button type="button" class="btn-add-to-cart" disabled>Non disponibile</button>
-                    {% endif %}
-                  </div>
-                </div>
-              {% endif %}
-            {% endfor %}
-          </div>
-          {% if collection.products_count > 50 %}
-            <p><a href="{{ collection.url }}">Vedi tutti i prodotti di {{ collection.title | escape }}</a></p>
-          {% endif %}
-        </div>
+    {% for collection in collections %}
+      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
+        {% assign cid_token = ',' | append: collection.id | append: ',' %}
+        {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token %}
+          {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
+        {% endunless %}
       {% endif %}
     {% endfor %}
   </div>

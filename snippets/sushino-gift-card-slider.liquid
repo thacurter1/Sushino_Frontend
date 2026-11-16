@@ -1,5 +1,5 @@
 {% comment %}
-  Card prodotto unificata per Gift Card (slider 30 EUR - 200 EUR, step 5 EUR).
+  Card prodotto unificata per Gift Card (slider stile Apple 30 EUR - 200 EUR, step 5 EUR).
   Parametri attesi:
   - product: oggetto prodotto Shopify
   - collection_products: (opzionale) lista prodotti della collezione Gift Card se esistono vecchie card separate
@@ -13,26 +13,28 @@
 {% assign slider_default_eur = slider_default_cents | divided_by: 100 %}
 
 <article class="product-grid-card sushino-gift-card-item" data-product-handle="{{ product.handle | escape }}">
-  <div class="product-thumb-top">
-    {% render 'sushino-product-image', product: product %}
+  <div class="product-thumb-top sushino-gift-visual-badge">
+    <div class="sushino-gift-visual-card">
+      <img loading="lazy" width="120" height="21" src="{{ 'logo-w.png' | asset_url }}" alt="Sushino" class="sushino-gift-visual-logo">
+      <div>
+        <div class="sushino-gift-visual-label">Gift Card</div>
+        <div class="sushino-gift-visual-amount js-gift-visual-amount">{{ slider_default_eur }} €</div>
+      </div>
+    </div>
   </div>
   <div class="product-body-content">
     <div>
-      <div class="product-name">{{ product.title | escape }}</div>
+      <div class="product-name">Tropical Gift Card</div>
       <div class="product-price-badge js-gift-price-badge">
         {{ slider_default_cents | money }}
       </div>
       <div class="product-description">
-        {% if product.description != blank %}
-          {{ product.description | strip_html | truncate: 120 }}
-        {% else %}
-          Scegli il valore della Gift Card Sushino da 30 € a 200 € (scatti di 5 €).
-        {% endif %}
+        Regala la #sushinoexperience! Scegli l’importo da 30 € a 200 €.
       </div>
 
       <div class="sushino-gift-card-control">
         <div class="sushino-gift-slider-header">
-          <span>Valore selezionato:</span>
+          <span>Importo Gift Card</span>
           <strong class="sushino-gift-slider-value js-gift-slider-value">{{ slider_default_eur }},00 €</strong>
         </div>
         {% capture gift_variants_json %}[{% assign emitted = false %}{% if collection_products %}{% for gp in collection_products %}{% for v in gp.variants %}{% if emitted %},{% endif %}{"id":{{ v.id }},"priceCents":{{ v.price }},"available":{{ v.available | json }},"title":{{ gp.title | append: " " | append: v.title | json }}}{% assign emitted = true %}{% endfor %}{% endfor %}{% else %}{% for v in gift_variants %}{% if emitted %},{% endif %}{"id":{{ v.id }},"priceCents":{{ v.price }},"available":{{ v.available | json }},"title":{{ v.title | json }}}{% assign emitted = true %}{% endfor %}{% endif %}]{% endcapture %}
@@ -43,6 +45,7 @@
           max="200"
           step="5"
           value="{{ slider_default_eur }}"
+          style="--slider-progress: 0%;"
           aria-label="Seleziona importo Gift Card in Euro da 30 a 200"
           data-gift-variants="{{ gift_variants_json | escape }}">
         <div class="sushino-gift-slider-bounds">

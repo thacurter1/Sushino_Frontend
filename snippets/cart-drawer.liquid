@@ -108,26 +108,37 @@
     } catch (e) {
       variants = [];
     }
-    const selectedEur = parseInt(slider.value || '30', 10);
+    const minEur = parseInt(slider.min || '30', 10);
+    const maxEur = parseInt(slider.max || '200', 10);
+    const selectedEur = parseInt(slider.value || String(minEur), 10);
+    const progressPct = Math.max(0, Math.min(100, ((selectedEur - minEur) / (maxEur - minEur)) * 100));
+    if (slider.style && typeof slider.style.setProperty === 'function') {
+      slider.style.setProperty('--slider-progress', `${progressPct}%`);
+    }
+
     const targetCents = selectedEur * 100;
     const resolved = resolveGiftVariant(variants, targetCents);
 
     const valueEl = card.querySelector('.js-gift-slider-value');
     const badgeEl = card.querySelector('.js-gift-price-badge');
+    const visualAmountEl = card.querySelector('.js-gift-visual-amount');
     const noteEl = card.querySelector('.js-gift-slider-note');
     const btn = card.querySelector('.js-add-gift-card');
 
     if (!resolved || !resolved.variant) {
       if (valueEl) valueEl.textContent = formatMoney(targetCents);
       if (badgeEl) badgeEl.textContent = formatMoney(targetCents);
+      if (visualAmountEl) visualAmountEl.textContent = `${selectedEur} €`;
       if (btn) btn.disabled = true;
       return null;
     }
 
     const activeVariant = resolved.variant;
     const displayCents = resolved.isExact ? targetCents : Number(activeVariant.priceCents);
+    const displayEur = Math.round(displayCents / 100);
     if (valueEl) valueEl.textContent = formatMoney(targetCents);
     if (badgeEl) badgeEl.textContent = formatMoney(displayCents);
+    if (visualAmountEl) visualAmountEl.textContent = `${displayEur} €`;
 
     if (noteEl) {
       if (resolved.isExact) {
