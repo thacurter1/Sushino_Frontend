@@ -5,7 +5,7 @@
     <div class="card" style="background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
       <p style="margin: 0 0 10px 0; font-size: 13px; line-height: 1.5;">
         <strong>Benvenuto su Sushino!</strong><br>
-        Orari della cucina: domenica 12:30–15:00 e 19:30–23:30, lunedì e martedì 19:30–23:30, da mercoledì a sabato 19:30–23:00. Consegniamo in tutta Livorno.<br>
+        Orari della cucina: domenica 12:30–15:00 e 19:30–23:30, da lunedì a mercoledì 19:30–23:30, da giovedì a sabato 19:30–23:00. Consegniamo in tutta Livorno.<br>
         <a href="{{ pages['allergeni'].url }}">Informazioni sugli allergeni</a><br>
         Hai bisogno di aiuto? <a href="tel:3520057782" style="color: #17a5b9; font-weight: bold;">Clicca qui</a> per ricevere assistenza.<br><br>
         Buona #sushinoexperience! 🛵 🍣 🌴
@@ -56,52 +56,75 @@
           </div>
 
           <div class="products-grid-layout">
+            {% assign is_gift_collection = false %}
+            {% if collection.handle contains 'gift' or collection.title contains 'Gift' %}
+              {% assign is_gift_collection = true %}
+            {% endif %}
+            {% assign gift_card_rendered = false %}
+
             {% for product in collection.products limit: 50 %}
-              {% assign is_box = false %}
-              {% assign slots = 0 %}
-              {% if product.tags contains 'box-3' %}
-                {% assign is_box = true %}
-                {% assign slots = 3 %}
-              {% elsif product.tags contains 'box-5' %}
-                {% assign is_box = true %}
-                {% assign slots = 5 %}
-              {% elsif product.tags contains 'box-8' %}
-                {% assign is_box = true %}
-                {% assign slots = 8 %}
-              {% elsif product.tags contains 'box-lunch' %}
-                {% assign is_box = true %}
-                {% assign slots = 1 %}
+              {% assign title_down = product.title | downcase %}
+              {% assign is_gift_product = false %}
+              {% if is_gift_collection or product.tags contains 'gift-card-slider' or product.handle contains 'gift-card' or title_down contains 'gift card' %}
+                {% assign is_gift_product = true %}
               {% endif %}
 
-              {% assign active_variant = product.first_available_variant %}
-              <div class="product-grid-card">
-                <div class="product-thumb-top">
-                  {% render 'sushino-product-image', product: product %}
-                </div>
-                <div class="product-body-content">
-                  <div>
-                    <div class="product-name">{{ product.title | escape }}</div>
-                    <div class="product-price-badge">{% if active_variant %}{{ active_variant.price | money }}{% else %}{{ product.price | money }}{% endif %}</div>
-                    <div class="product-description">
-                      {{ product.description | strip_html | truncate: 120 }}
-                    </div>
-                  </div>
+              {% if is_gift_product %}
+                {% if is_gift_collection %}
+                  {% unless gift_card_rendered %}
+                    {% render 'sushino-gift-card-slider', product: product, collection_products: collection.products %}
+                    {% assign gift_card_rendered = true %}
+                  {% endunless %}
+                {% else %}
+                  {% render 'sushino-gift-card-slider', product: product %}
+                {% endif %}
+              {% else %}
+                {% assign is_box = false %}
+                {% assign slots = 0 %}
+                {% if product.tags contains 'box-3' %}
+                  {% assign is_box = true %}
+                  {% assign slots = 3 %}
+                {% elsif product.tags contains 'box-5' %}
+                  {% assign is_box = true %}
+                  {% assign slots = 5 %}
+                {% elsif product.tags contains 'box-8' %}
+                  {% assign is_box = true %}
+                  {% assign slots = 8 %}
+                {% elsif product.tags contains 'box-lunch' %}
+                  {% assign is_box = true %}
+                  {% assign slots = 1 %}
+                {% endif %}
 
-                  {% if active_variant %}
-                    {% if is_box %}
-                      <button type="button" class="btn-add-to-cart js-configure-box" data-variant-id="{{ active_variant.id }}" data-product-title="{{ product.title | escape }}" data-slots="{{ slots }}" data-price-cents="{{ active_variant.price }}" data-is-lunch="{% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %}">
-                        Configura e Aggiungi
-                      </button>
+                {% assign active_variant = product.first_available_variant %}
+                <div class="product-grid-card">
+                  <div class="product-thumb-top">
+                    {% render 'sushino-product-image', product: product %}
+                  </div>
+                  <div class="product-body-content">
+                    <div>
+                      <div class="product-name">{{ product.title | escape }}</div>
+                      <div class="product-price-badge">{% if active_variant %}{{ active_variant.price | money }}{% else %}{{ product.price | money }}{% endif %}</div>
+                      <div class="product-description">
+                        {{ product.description | strip_html | truncate: 120 }}
+                      </div>
+                    </div>
+
+                    {% if active_variant %}
+                      {% if is_box %}
+                        <button type="button" class="btn-add-to-cart js-configure-box" data-variant-id="{{ active_variant.id }}" data-product-title="{{ product.title | escape }}" data-slots="{{ slots }}" data-price-cents="{{ active_variant.price }}" data-is-lunch="{% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %}">
+                          Configura e Aggiungi
+                        </button>
+                      {% else %}
+                        <button type="button" class="btn-add-to-cart js-add-product" data-variant-id="{{ active_variant.id }}">
+                          Aggiungi al Carrello
+                        </button>
+                      {% endif %}
                     {% else %}
-                      <button type="button" class="btn-add-to-cart js-add-product" data-variant-id="{{ active_variant.id }}">
-                        Aggiungi al Carrello
-                      </button>
+                      <button type="button" class="btn-add-to-cart" disabled>Non disponibile</button>
                     {% endif %}
-                  {% else %}
-                    <button type="button" class="btn-add-to-cart" disabled>Non disponibile</button>
-                  {% endif %}
+                  </div>
                 </div>
-              </div>
+              {% endif %}
             {% endfor %}
           </div>
           {% if collection.products_count > 50 %}

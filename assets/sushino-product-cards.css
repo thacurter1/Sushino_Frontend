@@ -144,3 +144,75 @@ body.theme-sushino-shopify { margin: 0; }
 @media (min-width: 1200px) {
   .site-header .site-branding .custom-logo { width: 300px; max-width: 300px; height: auto; }
 }
+
+/* Slider Gift Card (30 EUR - 200 EUR, step 5 EUR). */
+.sushino-gift-card-control {
+  margin: 10px 0 14px;
+  padding: 12px;
+  background: #f4fafb;
+  border: 1px solid #d5eef2;
+  border-radius: 12px;
+}
+
+.sushino-gift-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #333;
+}
+
+.sushino-gift-slider-value {
+  font-size: 16px;
+  font-weight: 800;
+  color: #17a5b9;
+}
+
+.sushino-gift-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #dcedf2;
+  outline: none;
+  cursor: pointer;
+}
+
+.sushino-gift-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #17a5b9;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.sushino-gift-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #17a5b9;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.sushino-gift-slider-bounds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+}
+
+.sushino-gift-slider-note {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: #996300;
+}

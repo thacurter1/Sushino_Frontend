@@ -448,6 +448,10 @@
       {% assign sushino_photo_asset = 'sushino-gift-card-10.svg' %}
       {% assign sushino_photo_width = 800 %}
       {% assign sushino_photo_height = 600 %}
+    {% when "tropical gift card", "gift card" %}
+      {% assign sushino_photo_asset = 'sushino-gift-card-5.svg' %}
+      {% assign sushino_photo_width = 800 %}
+      {% assign sushino_photo_height = 600 %}
   {% endcase %}
   {% if sushino_photo_asset != blank %}
     <img loading="lazy" width="{{ sushino_photo_width }}" height="{{ sushino_photo_height }}" src="{{ sushino_photo_asset | asset_url }}" alt="{{ product.title | escape }}">

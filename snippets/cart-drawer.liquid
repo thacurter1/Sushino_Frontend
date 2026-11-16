@@ -62,7 +62,111 @@
       return;
     }
     const productButton = event.target.closest('.js-add-product');
-    if (productButton) addProductToShopify(productButton.dataset.variantId, 1);
+    if (productButton) {
+      addProductToShopify(productButton.dataset.variantId, 1);
+      return;
+    }
+    const giftButton = event.target.closest('.js-add-gift-card');
+    if (giftButton && !giftButton.disabled) {
+      const card = giftButton.closest('.sushino-gift-card-item');
+      const slider = card ? card.querySelector('.js-gift-slider') : null;
+      const syncState = slider ? syncGiftCardSlider(slider) : null;
+      const variantId = (syncState && syncState.variantId) || giftButton.dataset.variantId;
+      const amountCents = (syncState && syncState.priceCents) || parseInt(giftButton.dataset.selectedCents || '3000', 10);
+      if (variantId) {
+        addProductToShopify(variantId, 1, {
+          'Importo Gift Card': formatMoney(amountCents)
+        });
+      }
+    }
+  });
+
+  function resolveGiftVariant(variants, targetCents) {
+    if (!Array.isArray(variants) || variants.length === 0) return null;
+    const availableVariants = variants.filter((v) => v && v.available);
+    const pool = availableVariants.length > 0 ? availableVariants : variants;
+    const exact = pool.find((v) => Number(v.priceCents) === targetCents);
+    if (exact) return { variant: exact, isExact: true };
+    let closest = pool[0];
+    let minDiff = Math.abs(Number(closest.priceCents) - targetCents);
+    for (const v of pool) {
+      const diff = Math.abs(Number(v.priceCents) - targetCents);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = v;
+      }
+    }
+    return { variant: closest, isExact: false };
+  }
+
+  function syncGiftCardSlider(slider) {
+    const card = slider.closest('.sushino-gift-card-item');
+    if (!card) return null;
+    let variants = [];
+    try {
+      variants = JSON.parse(slider.dataset.giftVariants || '[]');
+    } catch (e) {
+      variants = [];
+    }
+    const selectedEur = parseInt(slider.value || '30', 10);
+    const targetCents = selectedEur * 100;
+    const resolved = resolveGiftVariant(variants, targetCents);
+
+    const valueEl = card.querySelector('.js-gift-slider-value');
+    const badgeEl = card.querySelector('.js-gift-price-badge');
+    const noteEl = card.querySelector('.js-gift-slider-note');
+    const btn = card.querySelector('.js-add-gift-card');
+
+    if (!resolved || !resolved.variant) {
+      if (valueEl) valueEl.textContent = formatMoney(targetCents);
+      if (badgeEl) badgeEl.textContent = formatMoney(targetCents);
+      if (btn) btn.disabled = true;
+      return null;
+    }
+
+    const activeVariant = resolved.variant;
+    const displayCents = resolved.isExact ? targetCents : Number(activeVariant.priceCents);
+    if (valueEl) valueEl.textContent = formatMoney(targetCents);
+    if (badgeEl) badgeEl.textContent = formatMoney(displayCents);
+
+    if (noteEl) {
+      if (resolved.isExact) {
+        noteEl.hidden = true;
+        noteEl.textContent = '';
+      } else {
+        noteEl.hidden = false;
+        noteEl.textContent = `Taglio disponibile più vicino: ${formatMoney(displayCents)} (${activeVariant.title || ''})`.trim();
+      }
+    }
+
+    if (btn) {
+      btn.dataset.variantId = String(activeVariant.id);
+      btn.dataset.selectedCents = String(displayCents);
+      btn.disabled = !activeVariant.available;
+      btn.textContent = activeVariant.available
+        ? `Aggiungi Gift Card (${formatMoney(displayCents)})`
+        : 'Importo non disponibile';
+    }
+
+    return {
+      variantId: activeVariant.id,
+      priceCents: displayCents,
+      isExact: resolved.isExact
+    };
+  }
+
+  document.addEventListener('input', (event) => {
+    const slider = event.target.closest('.js-gift-slider');
+    if (slider) syncGiftCardSlider(slider);
+  });
+
+  document.addEventListener('change', (event) => {
+    const slider = event.target.closest('.js-gift-slider');
+    if (slider) syncGiftCardSlider(slider);
+  });
+
+  document.querySelectorAll('.js-gift-slider').forEach((slider) => {
+    syncGiftCardSlider(slider);
   });
 
   function formatMoney(cents) {
