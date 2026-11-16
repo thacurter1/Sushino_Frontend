@@ -121,24 +121,20 @@
 
     const valueEl = card.querySelector('.js-gift-slider-value');
     const badgeEl = card.querySelector('.js-gift-price-badge');
-    const visualAmountEl = card.querySelector('.js-gift-visual-amount');
     const noteEl = card.querySelector('.js-gift-slider-note');
     const btn = card.querySelector('.js-add-gift-card');
 
     if (!resolved || !resolved.variant) {
       if (valueEl) valueEl.textContent = formatMoney(targetCents);
       if (badgeEl) badgeEl.textContent = formatMoney(targetCents);
-      if (visualAmountEl) visualAmountEl.textContent = `${selectedEur} €`;
       if (btn) btn.disabled = true;
       return null;
     }
 
     const activeVariant = resolved.variant;
     const displayCents = resolved.isExact ? targetCents : Number(activeVariant.priceCents);
-    const displayEur = Math.round(displayCents / 100);
     if (valueEl) valueEl.textContent = formatMoney(targetCents);
     if (badgeEl) badgeEl.textContent = formatMoney(displayCents);
-    if (visualAmountEl) visualAmountEl.textContent = `${displayEur} €`;
 
     if (noteEl) {
       if (resolved.isExact) {
