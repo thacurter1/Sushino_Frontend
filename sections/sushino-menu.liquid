@@ -61,9 +61,16 @@
       {% for collection in collections %}
         {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
           {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token %}
+          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token or collection.handle == 'salse' or collection.handle == 'vino-e-bibite' %}
             <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
           {% endunless %}
+        {% endif %}
+      {% endfor %}
+      {% assign sushino_tail_handles = 'salse,vino-e-bibite' | split: ',' %}
+      {% for tail_handle in sushino_tail_handles %}
+        {% assign collection = collections[tail_handle] %}
+        {% if collection.products_count > 0 %}
+          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -106,9 +113,16 @@
       {% for collection in collections %}
         {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
           {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token %}
+          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token or collection.handle == 'salse' or collection.handle == 'vino-e-bibite' %}
             <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
           {% endunless %}
+        {% endif %}
+      {% endfor %}
+      {% assign sushino_tail_handles = 'salse,vino-e-bibite' | split: ',' %}
+      {% for tail_handle in sushino_tail_handles %}
+        {% assign collection = collections[tail_handle] %}
+        {% if collection.products_count > 0 %}
+          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -154,9 +168,15 @@
     {% for collection in collections %}
       {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
         {% assign cid_token = ',' | append: collection.id | append: ',' %}
-        {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token %}
+        {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token or collection.handle == 'salse' or collection.handle == 'vino-e-bibite' %}
           {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
         {% endunless %}
+      {% endif %}
+    {% endfor %}
+    {% for tail_handle in sushino_tail_handles %}
+      {% assign collection = collections[tail_handle] %}
+      {% if collection.products_count > 0 %}
+        {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
       {% endif %}
     {% endfor %}
   </div>
