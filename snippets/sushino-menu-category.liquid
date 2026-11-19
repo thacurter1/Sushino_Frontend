@@ -70,6 +70,7 @@
               </div>
             </div>
 
+            {% render 'sushino-product-variant-selector', product: product, active_variant: active_variant %}
             {% if active_variant %}
               {% if is_box %}
                 <button type="button" class="btn-add-to-cart js-configure-box" data-variant-id="{{ active_variant.id }}" data-product-title="{{ product.title | escape }}" data-slots="{{ slots }}" data-price-cents="{{ active_variant.price }}" data-is-lunch="{% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %}">

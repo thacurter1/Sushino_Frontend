@@ -1,0 +1,15 @@
+{% doc %}
+  Mostra le varianti reali del prodotto, senza alterarne il prezzo.
+  @param {product} product - Prodotto Shopify
+  @param {variant} active_variant - Variante iniziale disponibile
+{% enddoc %}
+{% if product.variants.size > 1 %}
+  <label style="display:grid;gap:6px;margin:0 0 12px;font-size:13px">
+    <span>Scegli la variante</span>
+    <select class="js-product-variant" aria-label="Variante di {{ product.title | escape }}" style="width:100%;min-height:44px;font:inherit;border:1px solid #d9e5e8;border-radius:8px;padding:8px;background:white">
+      {% for variant in product.variants %}
+        <option value="{{ variant.id }}" data-price-cents="{{ variant.price }}"{% if variant.id == active_variant.id %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>{{ variant.title | escape }} — {{ variant.price | money }}{% unless variant.available %} — non disponibile{% endunless %}</option>
+      {% endfor %}
+    </select>
+  </label>
+{% endif %}

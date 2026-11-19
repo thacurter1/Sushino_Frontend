@@ -82,6 +82,18 @@
     }
   });
 
+  document.addEventListener('change', (event) => {
+    const select = event.target.closest('.js-product-variant');
+    if (!select) return;
+    const card = select.closest('.product-grid-card');
+    const option = select.selectedOptions[0];
+    if (!card || !option) return;
+    const button = card.querySelector('.js-add-product');
+    const price = card.querySelector('.product-price-badge');
+    if (button) { button.dataset.variantId = option.value; button.disabled = option.disabled; }
+    if (price) price.textContent = formatMoney(Number(option.dataset.priceCents));
+  });
+
   function resolveGiftVariant(variants, targetCents) {
     if (!Array.isArray(variants) || variants.length === 0) return null;
     const availableVariants = variants.filter((v) => v && v.available);

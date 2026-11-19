@@ -37,7 +37,8 @@
             <div class="product-thumb-top">{% render 'sushino-product-image', product: product %}</div>
             <div class="product-body-content">
               <div><div class="product-name">{{ product.title | escape }}</div><div class="product-price-badge">{% if active_variant %}{{ active_variant.price | money }}{% else %}{{ product.price | money }}{% endif %}</div><div class="product-description">{{ product.description | strip_html | truncate: 120 }}</div></div>
-              {% if active_variant %}
+              {% render 'sushino-product-variant-selector', product: product, active_variant: active_variant %}
+            {% if active_variant %}
                 {% if slots > 0 %}
                   <button type="button" class="btn-add-to-cart js-configure-box" data-variant-id="{{ active_variant.id }}" data-product-title="{{ product.title | escape }}" data-slots="{{ slots }}" data-price-cents="{{ active_variant.price }}" data-is-lunch="{% if product.tags contains 'box-lunch' %}true{% else %}false{% endif %}">Configura e Aggiungi</button>
                 {% else %}<button type="button" class="btn-add-to-cart js-add-product" data-variant-id="{{ active_variant.id }}">Aggiungi al Carrello</button>{% endif %}
