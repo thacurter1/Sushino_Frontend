@@ -31,6 +31,7 @@
           {% elsif product.tags contains 'box-5' %}{% assign slots = 5 %}
           {% elsif product.tags contains 'box-8' %}{% assign slots = 8 %}
           {% elsif product.tags contains 'box-lunch' %}{% assign slots = 1 %}{% endif %}
+          {% if product.handle == 'box-vegana' %}{% assign slots = 0 %}{% endif %}
           {% assign active_variant = product.first_available_variant %}
           <article class="product-grid-card">
             <div class="product-thumb-top">{% render 'sushino-product-image', product: product %}</div>

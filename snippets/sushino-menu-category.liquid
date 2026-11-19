@@ -55,6 +55,7 @@
           {% assign slots = 1 %}
         {% endif %}
 
+        {% if product.handle == 'box-vegana' %}{% assign is_box = false %}{% assign slots = 0 %}{% endif %}
         {% assign active_variant = product.first_available_variant %}
         <div class="product-grid-card">
           <div class="product-thumb-top">

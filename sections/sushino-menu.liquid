@@ -14,64 +14,16 @@
   </div>
 
   {% paginate collections by 50 %}
-  {% assign sushino_box_ids = ',' %}
-  {% assign sushino_lunch_ids = ',' %}
-  {% assign sushino_gift_ids = ',' %}
-  {% for collection in collections %}
-    {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-      {% assign c_title = collection.title | downcase %}
-      {% assign c_handle = collection.handle | downcase %}
-      {% if c_handle contains 'gift' or c_title contains 'gift' %}
-        {% assign sushino_gift_ids = sushino_gift_ids | append: collection.id | append: ',' %}
-      {% elsif c_handle contains 'pranzo' or c_title contains 'pranzo' or c_handle contains 'lunch' or c_title contains 'lunch' %}
-        {% assign sushino_lunch_ids = sushino_lunch_ids | append: collection.id | append: ',' %}
-      {% elsif c_handle contains 'box' or c_title contains 'box' %}
-        {% assign sushino_box_ids = sushino_box_ids | append: collection.id | append: ',' %}
-      {% endif %}
-    {% endif %}
-  {% endfor %}
+  {% assign priority_handles = 'tropical-gift-card|tropical-box-pranzo|tropical-sushi-box|entree|nigiri-3-pezzi|gunkan-joe-2-pz|hosomaki-8-pz|uramaki-branzino-8-pz|uramaki-gambero-8-pz|uramaki-salmone-8-pz|uramaki-tonno-8-pz' | split: '|' %}
+  {% assign selected_handles = '|' %}
+  {% capture ordered_handles %}{% for handle in priority_handles %}{% assign category = collections[handle] %}{% if category.products_count > 0 %}{{ handle }}|{% assign selected_handles = selected_handles | append: handle | append: '|' %}{% endif %}{% endfor %}{% for category in collections %}{% assign handle_token = '|' | append: category.handle | append: '|' %}{% if category.products_count > 0 and category.handle != 'frontpage' and category.handle != 'salse' and category.handle != 'vino-e-bibite' %}{% unless selected_handles contains handle_token %}{{ category.handle }}|{% endunless %}{% endif %}{% endfor %}{% if collections['salse'].products_count > 0 %}salse|{% endif %}{% if collections['vino-e-bibite'].products_count > 0 %}vino-e-bibite|{% endif %}{% endcapture %}
+  {% assign menu_handles = ordered_handles | split: '|' %}
 
   <details class="sushino-mobile-categories">
     <summary>Scegli una categoria <span aria-hidden="true">⌄</span></summary>
     <ul>
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% if sushino_box_ids contains cid_token %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% if sushino_lunch_ids contains cid_token %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% if sushino_gift_ids contains cid_token %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token or collection.handle == 'salse' or collection.handle == 'vino-e-bibite' %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endunless %}
-        {% endif %}
-      {% endfor %}
-      {% assign sushino_tail_handles = 'salse,vino-e-bibite' | split: ',' %}
-      {% for tail_handle in sushino_tail_handles %}
-        {% assign collection = collections[tail_handle] %}
-        {% if collection.products_count > 0 %}
-          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-        {% endif %}
+      {% for handle in menu_handles %}{% assign category = collections[handle] %}
+        <li><a href="#cat-{{ category.id }}">{{ category.title | escape }}</a></li>
       {% endfor %}
     </ul>
   </details>
@@ -81,103 +33,21 @@
     });
   </script>
 
-  <!-- BARRA CATEGORIE ORIZZONTALE (Tropical Box al 1° posto) -->
   <nav class="top-categories-bar" aria-label="Menu categorie">
     <ul class="top-categories-list">
-      {% assign first_pill = true %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% if sushino_box_ids contains cid_token %}
-            <li{% if first_pill %} class="active"{% endif %}><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-            {% assign first_pill = false %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% if sushino_lunch_ids contains cid_token %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% if sushino_gift_ids contains cid_token %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% for collection in collections %}
-        {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-          {% assign cid_token = ',' | append: collection.id | append: ',' %}
-          {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token or collection.handle == 'salse' or collection.handle == 'vino-e-bibite' %}
-            <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-          {% endunless %}
-        {% endif %}
-      {% endfor %}
-      {% assign sushino_tail_handles = 'salse,vino-e-bibite' | split: ',' %}
-      {% for tail_handle in sushino_tail_handles %}
-        {% assign collection = collections[tail_handle] %}
-        {% if collection.products_count > 0 %}
-          <li><a href="#cat-{{ collection.id }}">{{ collection.title | escape }}</a></li>
-        {% endif %}
+      {% for handle in menu_handles %}{% assign category = collections[handle] %}
+        <li{% if forloop.first %} class="active"{% endif %}><a href="#cat-{{ category.id }}">{{ category.title | escape }}</a></li>
       {% endfor %}
     </ul>
   </nav>
 
-  <!-- GRIGLIA PRODOTTI DINAMICA DA COLLEZIONI SHOPIFY (Tropical Box Sezione N.1) -->
   <div class="products card" style="background: #fff; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
     <h2 style="font-size: 20px; margin: 0 0 20px 0; color: #000;">Il Nostro Menu</h2>
-
-    {% assign box_anchor_emitted = false %}
-    {% for collection in collections %}
-      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-        {% assign cid_token = ',' | append: collection.id | append: ',' %}
-        {% if sushino_box_ids contains cid_token %}
-          {% assign emit_cat33 = false %}
-          {% unless box_anchor_emitted %}
-            {% assign emit_cat33 = true %}
-            {% assign box_anchor_emitted = true %}
-          {% endunless %}
-          {% render 'sushino-menu-category', collection: collection, is_first_box: emit_cat33 %}
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-
-    {% for collection in collections %}
-      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-        {% assign cid_token = ',' | append: collection.id | append: ',' %}
-        {% if sushino_lunch_ids contains cid_token %}
-          {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-
-    {% for collection in collections %}
-      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-        {% assign cid_token = ',' | append: collection.id | append: ',' %}
-        {% if sushino_gift_ids contains cid_token %}
-          {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-
-    {% for collection in collections %}
-      {% if collection.products_count > 0 and collection.handle != 'frontpage' %}
-        {% assign cid_token = ',' | append: collection.id | append: ',' %}
-        {% unless sushino_box_ids contains cid_token or sushino_lunch_ids contains cid_token or sushino_gift_ids contains cid_token or collection.handle == 'salse' or collection.handle == 'vino-e-bibite' %}
-          {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
-        {% endunless %}
-      {% endif %}
-    {% endfor %}
-    {% for tail_handle in sushino_tail_handles %}
-      {% assign collection = collections[tail_handle] %}
-      {% if collection.products_count > 0 %}
-        {% render 'sushino-menu-category', collection: collection, is_first_box: false %}
-      {% endif %}
+    {% for handle in menu_handles %}
+      {% assign category = collections[handle] %}
+      {% assign is_first_box = false %}
+      {% if handle == 'tropical-sushi-box' %}{% assign is_first_box = true %}{% endif %}
+      {% render 'sushino-menu-category', collection: category, is_first_box: is_first_box %}
     {% endfor %}
   </div>
   {{ paginate | default_pagination }}

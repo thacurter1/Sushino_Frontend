@@ -19,16 +19,16 @@
       <!-- Extra (Bevande, Salse, Bacchette) -->
       <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
         <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Vuoi da bere?</h4>
-        {% assign qd_coca = all_products['coca-cola-vetro-33cl'] %}
-        {% assign qd_coca_zero = all_products['coca-cola-zero-vetro-33cl'] %}
-        {% assign qd_fanta = all_products['fanta-vetro-33cl'] %}
-        {% assign qd_wine = all_products['chardonnay-batti-becco'] %}
+        {% assign qd_coca = all_products['coca-cola-vetro-33-cl'] %}
+        {% assign qd_coca_zero = all_products['coca-cola-zero-vetro-33-cl'] %}
+        {% assign qd_fanta = all_products['fanta-vetro-33-cl'] %}
+        {% assign qd_wine = all_products['chardonnay-igt-principesco-75-cl'] %}
         <select id="qd-opt-drink" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
           <option value="none" data-unit-price="0">Nessuna bevanda</option>
           {% if qd_coca and qd_coca.first_available_variant %}<option value="coca" data-product-handle="{{ qd_coca.handle }}" data-variant-id="{{ qd_coca.first_available_variant.id }}" data-unit-price="{{ qd_coca.first_available_variant.price }}" data-quantity="1">Coca-Cola vetro 33cl ({{ qd_coca.first_available_variant.price | money }})</option>{% endif %}
           {% if qd_coca_zero and qd_coca_zero.first_available_variant %}<option value="coca-zero" data-product-handle="{{ qd_coca_zero.handle }}" data-variant-id="{{ qd_coca_zero.first_available_variant.id }}" data-unit-price="{{ qd_coca_zero.first_available_variant.price }}" data-quantity="1">Coca-Cola Zero vetro 33cl ({{ qd_coca_zero.first_available_variant.price | money }})</option>{% endif %}
           {% if qd_fanta and qd_fanta.first_available_variant %}<option value="fanta" data-product-handle="{{ qd_fanta.handle }}" data-variant-id="{{ qd_fanta.first_available_variant.id }}" data-unit-price="{{ qd_fanta.first_available_variant.price }}" data-quantity="1">Fanta Vetro 33cl ({{ qd_fanta.first_available_variant.price | money }})</option>{% endif %}
-          {% if qd_wine and qd_wine.first_available_variant %}<option value="batti-becco" data-product-handle="{{ qd_wine.handle }}" data-variant-id="{{ qd_wine.first_available_variant.id }}" data-unit-price="{{ qd_wine.first_available_variant.price }}" data-quantity="1">Chardonnay Batti Becco Bianco 0,75l ({{ qd_wine.first_available_variant.price | money }})</option>{% endif %}
+          {% if qd_wine and qd_wine.first_available_variant %}<option value="batti-becco" data-product-handle="{{ qd_wine.handle }}" data-variant-id="{{ qd_wine.first_available_variant.id }}" data-unit-price="{{ qd_wine.first_available_variant.price }}" data-quantity="1">Chardonnay IGT Principesco 75 cl ({{ qd_wine.first_available_variant.price | money }})</option>{% endif %}
         </select>
       </div>
 
@@ -283,7 +283,7 @@
     const missing = currentBox.slotsRequired - currentBox.selectedPlates.length;
     if (missing === 0) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Aggiungi Box a Shopify';
+      submitBtn.textContent = 'Aggiungi box al carrello';
     } else {
       submitBtn.disabled = true;
       submitBtn.textContent = `Mancano ${missing} piatti`;
