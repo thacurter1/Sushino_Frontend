@@ -3,6 +3,7 @@
   .cart-drawer-panel { overflow-y: auto; }
   .cart-drawer-body { flex: 0 0 auto; overflow: visible; }
   .cart-drawer-footer { flex: 0 0 auto; }
+  #sushino-service-fields[hidden] { display:none !important; }
   [data-sushino-checkout]:disabled { opacity:.6; cursor:wait; }
 </style>
 <div class="cart-drawer-backdrop" id="shopify-cart-backdrop" data-cart-backdrop>
@@ -19,7 +20,7 @@
         <span>Subtotale prodotti:</span>
         <span id="shopify-cart-total-display" style="color: #17a5b9;">0,00 €</span>
       </div>
-      <fieldset style="border:0;padding:0;margin:0 0 16px;display:grid;gap:10px">
+      <fieldset id="sushino-service-fields" style="border:0;padding:0;margin:0 0 16px;display:grid;gap:10px">
         <legend style="font-weight:700;margin-bottom:10px">Come e quando vuoi ricevere l’ordine?</legend>
         <label for="sushino-service-mode">Modalità</label>
         <select id="sushino-service-mode" required style="width:100%;min-height:44px;font:inherit"><option value="">Scegli ritiro o consegna</option><option value="ritiro">Ritiro al locale — gratuito</option><option value="delivery">Consegna a domicilio — 2 €</option></select>
