@@ -3,6 +3,7 @@
  const formatter=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
  function rome(now){return Object.fromEntries(formatter.formatToParts(now).map(p=>[p.type,p.value]));}
  function dateKey(p){return p.year+'-'+p.month+'-'+p.day;}
+ function lastDate(now){const day=new Date(dateKey(rome(now))+'T12:00:00Z');day.setUTCDate(day.getUTCDate()+1);return day.toISOString().slice(0,10);}
  function windows(date){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return [];
   const d=new Date(date+'T12:00:00Z');
@@ -13,7 +14,7 @@
  const clock=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
  function slots(date,now=new Date(),lunchOnly=false){
   const p=rome(now),today=dateKey(p),minimum=Number(p.hour)*60+Number(p.minute)+Number(p.second)/60+30;
-  if(date<today)return [];
+  if(date<today||date>lastDate(now))return [];
   const out=[];
   for(const [start,end] of windows(date).filter(([start])=>!lunchOnly||start<900))for(let m=start;m+30<=end;m+=30){if(date>today||m>=minimum)out.push(clock(m)+'-'+clock(m+30));}
   return out;
@@ -21,7 +22,7 @@
  function valid(mode,date,slot,now=new Date(),lunchOnly=false){return ['ritiro','delivery'].includes(mode)&&slots(date,now,lunchOnly).includes(slot);}
  function isLunchCart(cart,handles){return (cart.items||[]).some(item=>handles.includes(item.handle)||item.product_type==='Tropical Box Pranzo');}
  function isGiftOnlyCart(cart){const items=cart.items||[];return items.length>0&&items.every(item=>item.gift_card===true||item.handle==='tropical-gift-card');}
- const api={slots,valid,windows,isLunchCart,isGiftOnlyCart};
+ const api={slots,valid,windows,isLunchCart,isGiftOnlyCart,lastDate};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  root.SushinoServiceTime=api;
  if(typeof document==='undefined')return;
@@ -35,12 +36,12 @@
   const lunchMessage='Le Tropical Box Pranzo sono disponibili solo giovedì, venerdì, sabato e domenica, dalle 12:30 alle 15:00. Scegli una fascia di pranzo oppure rimuovi le box pranzo.';
   const keys={mode:'Sushino - Modalita',date:'Sushino - Data',slot:'Sushino - Fascia'};
   function populate(){
-   const previous=slot.value;date.min=dateKey(rome(new Date()));
+   const previous=slot.value;date.min=dateKey(rome(new Date()));date.max=lastDate(new Date());
    slot.replaceChildren(new Option('Scegli una fascia oraria',''));
    const available=slots(date.value,new Date(),lunchOnly);for(const s of available)slot.add(new Option(s.replace('-',' – '),s));
    if(available.includes(previous))slot.value=previous;
    slot.disabled=!date.value||available.length===0;
-   error.textContent=lunchOnly?lunchMessage:date.value&&!available.length?'Nessuna fascia disponibile: scegli un altro giorno.':'';
+   error.textContent=lunchOnly?lunchMessage:date.value&&!available.length?'Nessuna fascia disponibile: puoi prenotare solo per oggi o domani.':'';
   }
   date.addEventListener('change',populate);mode.addEventListener('change',()=>{error.textContent='';});
   document.addEventListener('sushino:cart-loaded',event=>{
