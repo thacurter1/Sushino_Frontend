@@ -396,53 +396,13 @@
           }
         }
 
-        const actionSelector = '.js-add-product, .js-configure-box, #qd-modal-submit, #shopify-cart-footer a';
         const notice = document.getElementById('sushino-order-hours');
-        const originalLabels = new WeakMap();
-
         function refresh(status = getStatus()) {
           notice.hidden = status.open;
-          const message = status.open ? '' : 'Cucina chiusa. Prossima apertura ' + status.next + '.';
+          const message = status.open ? '' : 'Cucina chiusa. Puoi preordinare per oggi o domani scegliendo una fascia disponibile nel carrello. Prossima apertura ' + status.next + '.';
           if (notice.textContent !== message) notice.textContent = message;
-          document.querySelectorAll(actionSelector).forEach((action) => {
-            if (!status.open && !originalLabels.has(action)) {
-              originalLabels.set(action, {
-                disabled: action.getAttribute('aria-disabled'),
-                label: action.textContent,
-                href: action.getAttribute('href')
-              });
-              action.setAttribute('aria-disabled', 'true');
-              action.setAttribute('data-sushino-hours-disabled', '');
-              if (action.matches('a')) {
-                action.removeAttribute('href');
-                action.textContent = 'Checkout disponibile alla riapertura';
-              }
-            } else if (status.open && originalLabels.has(action)) {
-              const original = originalLabels.get(action);
-              if (original.disabled === null) action.removeAttribute('aria-disabled');
-              else action.setAttribute('aria-disabled', original.disabled);
-              action.removeAttribute('data-sushino-hours-disabled');
-              if (original.href !== null) {
-                action.setAttribute('href', original.href);
-                action.textContent = original.label;
-              }
-              originalLabels.delete(action);
-            }
-          });
         }
 
-        function checkAction(event) {
-          if (!(event.target instanceof Element) || !event.target.closest(actionSelector)) return;
-          const status = getStatus();
-          refresh(status);
-          if (!status.open) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-          }
-        }
-
-        document.addEventListener('click', checkAction, true);
-        document.addEventListener('auxclick', checkAction, true);
         document.addEventListener('visibilitychange', () => refresh());
         window.addEventListener('pageshow', () => refresh());
         refresh();
