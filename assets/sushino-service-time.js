@@ -22,7 +22,25 @@
  function valid(mode,date,slot,now=new Date(),lunchOnly=false){return ['ritiro','delivery'].includes(mode)&&slots(date,now,lunchOnly).includes(slot);}
  function isLunchCart(cart,handles){return (cart.items||[]).some(item=>handles.includes(item.handle)||item.product_type==='Tropical Box Pranzo');}
  function isGiftOnlyCart(cart){const items=cart.items||[];return items.length>0&&items.every(item=>item.gift_card===true||item.handle==='tropical-gift-card');}
- const api={slots,valid,windows,isLunchCart,isGiftOnlyCart,lastDate};
+ function lunchNotice(date,now=new Date()){
+  if(slots(date,now,true).length)return '';
+  const today=dateKey(rome(now)),day=new Date(today+'T12:00:00Z');
+  const pretty=value=>new Intl.DateTimeFormat('it-IT',{timeZone:'Europe/Rome',weekday:'long',day:'numeric',month:'long'}).format(new Date(value+'T12:00:00Z'));
+  const closed=!windows(date).some(([start])=>start<900);
+  const prefix=closed?'Nel giorno selezionato la cucina è chiusa a pranzo.':'Per il giorno selezionato non ci sono più fasce di pranzo prenotabili con almeno 30 minuti di anticipo.';
+  let next='';
+  for(let i=0;i<8;i++){
+   const candidate=day.toISOString().slice(0,10);
+   // Find the next actual lunch, even when outside today's preorder horizon.
+   if(windows(candidate).some(([start])=>start<900)&&(candidate>today||slots(candidate,now,true).length)){next=candidate;break;}
+   day.setUTCDate(day.getUTCDate()+1);
+  }
+  if(!next)return prefix+' Le Tropical Box Pranzo sono disponibili da giovedì a domenica, 12:30–15:00.';
+  const opening=new Date(next+'T12:00:00Z');opening.setUTCDate(opening.getUTCDate()-1);
+  const action=next>lastDate(now)?'Potrai preordinarlo da '+pretty(opening.toISOString().slice(0,10))+': accettiamo preordini solo per oggi e domani.':'Scegli questa data e una fascia di pranzo disponibile.';
+  return prefix+' Le Tropical Box Pranzo si possono ordinare solo a pranzo. Prossimo pranzo disponibile: '+pretty(next)+', 12:30–15:00. '+action+' Per ordinare a cena, rimuovi le box pranzo e scegli gli altri piatti del menu.';
+ }
+ const api={slots,valid,windows,isLunchCart,isGiftOnlyCart,lastDate,lunchNotice};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  root.SushinoServiceTime=api;
  if(typeof document==='undefined')return;
@@ -33,7 +51,7 @@
   const serviceFields=document.getElementById('sushino-service-fields');
   function showServiceFields(){if(serviceFields)serviceFields.hidden=giftOnly;for(const field of [mode,date,slot])field.required=!giftOnly;}
   const lunchHandles=(button.dataset.lunchHandles||'').split(',').filter(Boolean);
-  const lunchMessage='Le Tropical Box Pranzo sono disponibili solo giovedì, venerdì, sabato e domenica, dalle 12:30 alle 15:00. Scegli una fascia di pranzo oppure rimuovi le box pranzo.';
+  const lunchMessage=()=>lunchNotice(date.value,new Date())||'Le Tropical Box Pranzo sono disponibili solo giovedì, venerdì, sabato e domenica, dalle 12:30 alle 15:00. Scegli una fascia di pranzo oppure rimuovi le box pranzo.';
   const keys={mode:'Sushino - Modalita',date:'Sushino - Data',slot:'Sushino - Fascia'};
   function populate(){
    const previous=slot.value;date.min=dateKey(rome(new Date()));date.max=lastDate(new Date());
@@ -41,9 +59,9 @@
    const available=slots(date.value,new Date(),lunchOnly);for(const s of available)slot.add(new Option(s.replace('-',' – '),s));
    if(available.includes(previous))slot.value=previous;
    slot.disabled=!date.value||available.length===0;
-   error.textContent=lunchOnly?lunchMessage:date.value&&!available.length?'Nessuna fascia disponibile: puoi prenotare solo per oggi o domani.':'';
+   error.textContent=lunchOnly?lunchMessage():date.value&&!available.length?'Nessuna fascia disponibile: puoi prenotare solo per oggi o domani.':'';
   }
-  date.addEventListener('change',populate);mode.addEventListener('change',()=>{error.textContent='';});
+  date.addEventListener('change',populate);mode.addEventListener('change',populate);
   document.addEventListener('sushino:cart-loaded',event=>{
    if(busy)return;giftOnly=isGiftOnlyCart(event.detail);showServiceFields();lunchOnly=isLunchCart(event.detail,lunchHandles);const a=event.detail.attributes||{};
    if(!mode.value)mode.value=a[keys.mode]==='Ritiro'?'ritiro':a[keys.mode]==='Consegna a domicilio'?'delivery':'';
@@ -53,7 +71,7 @@
   button.addEventListener('click',async event=>{
    event.preventDefault();if(busy)return;
    if(!giftOnly&&!valid(mode.value,date.value,slot.value,new Date(),lunchOnly)){
-    populate();error.textContent=lunchOnly?lunchMessage:'Scegli ritiro o consegna, giorno e una fascia ancora disponibile (almeno 30 minuti di anticipo).';
+    populate();error.textContent=lunchOnly?lunchMessage():'Scegli ritiro o consegna, giorno e una fascia ancora disponibile (almeno 30 minuti di anticipo).';
     (!mode.value?mode:!date.value?date:slot).focus();return;
    }
    busy=true;button.disabled=true;mode.disabled=true;date.disabled=true;slot.disabled=true;button.setAttribute('aria-disabled','true');const label=button.textContent;button.textContent='Salvataggio orario…';error.textContent='';
@@ -78,7 +96,7 @@
     const cart=await response.json();
     if(!cart.item_count||Object.entries(attributes).some(([k,v])=>cart.attributes?.[k]!==v))throw Error('Carrello o orario non confermato. Riapri il carrello e riprova.');
     lunchOnly=isLunchCart(cart,lunchHandles);
-    if(!valid(mode.value,date.value,slot.value,new Date(),lunchOnly)){populate();throw Error(lunchOnly?lunchMessage:'La fascia è scaduta durante il salvataggio. Scegli un nuovo orario.');}
+    if(!valid(mode.value,date.value,slot.value,new Date(),lunchOnly)){populate();throw Error(lunchOnly?lunchMessage():'La fascia è scaduta durante il salvataggio. Scegli un nuovo orario.');}
     window.location.assign(button.dataset.checkoutUrl);
    }catch(e){error.textContent=e.message||'Collegamento non riuscito. Riprova.';}
    finally{busy=false;button.disabled=false;mode.disabled=false;date.disabled=false;slot.disabled=false;button.removeAttribute('aria-disabled');button.textContent=label;}
