@@ -12,7 +12,7 @@
     "cart": {
       "title": "Il tuo Carrello",
       "empty": "Nessun prodotto nel carrello.",
-      "checkout": "Procedi al Checkout",
+      "checkout": "Vai al pagamento",
       "total": "Totale da Pagare:"
     },
     "service": {
