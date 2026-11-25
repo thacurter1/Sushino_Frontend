@@ -99,6 +99,28 @@
   </div>
 </div>
 
+{% comment %}Published menu dishes, including available variants; extras and boxes are excluded.{% endcomment %}
+<div id="qd-box-menu-catalog" hidden>
+  {% for category in collections %}
+    {% assign qd_food_category = false %}
+    {% if category.handle == 'entree' or category.handle contains 'uramaki' or category.handle contains 'nigiri' or category.handle contains 'gunkan' or category.handle contains 'hosomaki' or category.handle contains 'futomaki' or category.handle contains 'hot-fried-roll' or category.handle == 'vegg-maki' %}
+      {% assign qd_food_category = true %}
+    {% endif %}
+    {% if qd_food_category %}
+      {% for dish in category.products limit: 50 %}
+        {% unless dish.gift_card or dish.handle contains 'gift-card' or dish.handle contains 'box' or dish.handle contains 'lunch' %}
+          {% for dish_variant in dish.variants %}
+            {% if dish_variant.available %}
+              {% capture qd_dish_label %}{{ dish.title }}{% unless dish_variant.title == 'Default Title' %} — {{ dish_variant.title }}{% endunless %}{% endcapture %}
+              <span data-box-variant="{{ dish_variant.id }}" data-box-label="{{ qd_dish_label | strip | escape }}"></span>
+            {% endif %}
+          {% endfor %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>
+
 <script>
   let currentBox = {
     variantId: null,
@@ -115,27 +137,17 @@
     isLunch: false
   };
 
-  const LUNCH_CHOICES = [
-    "Uramaki Philadelphia 8 pz",
-    "Uramaki Tempura 8 pz",
-    "Olio's Uramaki 8 pz",
-    "Uramaki Tonno Piccante 8 pz"
-  ];
-
-  const EVENING_CHOICES = [
-    "Uramaki Salmone spicy (8 pezzi)",
-    "Uramaki Philadelphia (8 pezzi)",
-    "Tempura di Salmone (8 pezzi)",
-    "Uramaki California (8 pezzi)",
-    "Uramaki White (8 pezzi)",
-    "Uramaki Tonno Pistacchio (8 pezzi)",
-    "Uramaki Tonno Piccante (8 pezzi)",
-    "Uramaki Ebi Tempura (8 pezzi)",
-    "Olio's Uramaki (8 pezzi)",
-    "Hot Salmon Roll (8 pezzi)",
-    "Nigiri Salmone (3 pezzi)",
-    "Nigiri Branzino (3 pezzi)"
-  ];
+  function boxPlateChoices() {
+    const seen = new Set();
+    return Array.from(document.querySelectorAll('#qd-box-menu-catalog [data-box-variant]'))
+      .filter(entry => {
+        const id = entry.dataset.boxVariant;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      })
+      .map(entry => entry.dataset.boxLabel);
+  }
 
   function openBoxModalFor(variantId, name, slots, priceCents, isLunch) {
     currentBox = {
@@ -186,7 +198,7 @@
   function renderPlatesList() {
     const container = document.getElementById('qd-plate-list');
     container.innerHTML = '';
-    const pool = currentBox.isLunch ? LUNCH_CHOICES : EVENING_CHOICES;
+    const pool = boxPlateChoices();
 
     pool.forEach(plate => {
       const row = document.createElement('div');
